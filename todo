@@ -1,0 +1,58 @@
+system_cmds:
+  arch
+  dmesg
+  hostinfo
+  login
+  lsmp
+  passwd
+  shutdown
+  sync
+  sysctl
+
+bzip2
+
+file_cmds:
+  chflags
+
+adv_cmds:
+  stty
+
+network_cmds:
+  ifconfig
+  ping
+
+kext_tools:
+  kextstat
+
+launchctl
+
+ldid
+
+less
+
+xz
+
+shell_cmds:
+  hexdump
+  killall
+  renice
+  script
+  what
+
+text_cmds:
+  md5
+  mknod
+
+CF:
+  plconvert
+
+plutil
+
+screen
+
+snaputil
+
+vim
+
+uikittools:
+  uicache
