@@ -21,6 +21,7 @@ less: less-setup
 	+$(MAKE) -C $(BUILD_WORK)/less
 	+$(MAKE) -C $(BUILD_WORK)/less install \
 		DESTDIR="$(BUILD_STAGE)/less"
+	$(LN_S) less $(BUILD_STAGE)/less/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/more
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
 endif

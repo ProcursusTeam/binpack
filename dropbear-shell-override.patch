@@ -1,0 +1,44 @@
+diff --color -urN dropbear-DROPBEAR_2020.81/common-session.c dropbear/common-session.c
+--- dropbear-DROPBEAR_2020.81/common-session.c	2020-10-29 13:35:50.000000000 +0000
++++ dropbear/common-session.c	2022-02-21 20:19:01.310002320 +0000
+@@ -610,6 +610,8 @@
+ }
+ 
+ const char* get_user_shell() {
++	if (svr_opts.shell != NULL)
++		return svr_opts.shell;
+ 	/* an empty shell should be interpreted as "/bin/sh" */
+ 	if (ses.authstate.pw_shell[0] == '\0') {
+ 		return "/bin/sh";
+diff --color -urN dropbear-DROPBEAR_2020.81/runopts.h dropbear/runopts.h
+--- dropbear-DROPBEAR_2020.81/runopts.h	2020-10-29 13:35:50.000000000 +0000
++++ dropbear/runopts.h	2022-02-21 20:19:23.233552819 +0000
+@@ -129,6 +129,7 @@
+         char *pubkey_plugin;
+         char *pubkey_plugin_options;
+ #endif
++	char *shell;
+ 
+ } svr_runopts;
+ 
+diff --color -urN dropbear-DROPBEAR_2020.81/svr-runopts.c dropbear/svr-runopts.c
+--- dropbear-DROPBEAR_2020.81/svr-runopts.c	2020-10-29 13:35:50.000000000 +0000
++++ dropbear/svr-runopts.c	2022-02-21 20:17:48.767942048 +0000
+@@ -173,6 +173,7 @@
+         svr_opts.pubkey_plugin = NULL;
+         svr_opts.pubkey_plugin_options = NULL;
+ #endif
++	svr_opts.shell = NULL;
+ 
+ #ifndef DISABLE_ZLIB
+ 	opts.compress_mode = DROPBEAR_COMPRESS_DELAYED;
+@@ -284,6 +285,9 @@
+ 					svr_opts.allowblankpass = 1;
+ 					break;
+ #endif
++				case 'S':
++					next = &svr_opts.shell;
++					break;
+ 				case 'h':
+ 					printhelp(argv[0]);
+ 					exit(EXIT_SUCCESS);

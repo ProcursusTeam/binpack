@@ -47,6 +47,7 @@ vim: vim-setup
 	+$(MAKE) -C $(BUILD_WORK)/vim install \
 		DESTDIR="$(BUILD_STAGE)/vim"
 	rm -rf $(BUILD_STAGE)/vim/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/vimtutor $(BUILD_STAGE)/vim/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share
+	$(LN_S) vim $(BUILD_STAGE)/vim/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/vi
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
 endif

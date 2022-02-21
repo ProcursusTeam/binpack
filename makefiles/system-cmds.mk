@@ -24,23 +24,27 @@ system-cmds:
 else
 system-cmds: system-cmds-setup libxcrypt
 	cd $(BUILD_WORK)/system-cmds; \
-	for tool in arch dmesg hostinfo login lsmp passwd shutdown sync sysctl; do \
+	for tool in arch dmesg hostinfo login lsmp ltop passwd shutdown sc_usage sync sysctl taskpolicy; do \
 		EXTRA=; \
 		case $${tool} in \
 			arch) EXTRA="-framework CoreFoundation";; \
 			passwd) EXTRA="-lcrypt";; \
 			shutdown) EXTRA="-lbsm -framework IOKit";; \
+			sc_usage) EXTRA="-lncurses";; \
 		esac; \
 		echo "$${tool}"; \
-		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA -Iinclude -I$${tool}.tproj $${tool}.tproj/*.c -o $${tool}; \
+		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA -Iinclude -I$${tool}.tproj $${tool}.tproj/*.c -o $${tool} -DPRIVATE; \
 	done
 	mkdir -p $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX){/{s,}bin,$(MEMO_SUB_PREFIX)/{s,}bin}
-	install -m 755 $(BUILD_WORK)/system-cmds/{arch,hostinfo,login,lsmp,passwd} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/
+	install -m 755 $(BUILD_WORK)/system-cmds/{arch,hostinfo,login,lsmp,passwd,sc_usage} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/
 	install -m 755 $(BUILD_WORK)/system-cmds/sync $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)/bin/
-	install -m 755 $(BUILD_WORK)/system-cmds/sysctl $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/
+	install -m 755 $(BUILD_WORK)/system-cmds/{sysctl,ltop,taskpolicy} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/
 	install -m 755 $(BUILD_WORK)/system-cmds/{dmesg,shutdown} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)/sbin/
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
+	$(LDID) -S$(BUILD_MISC)/entitlements/lsmp.xml $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/lsmp
+	$(LDID) -S$(BUILD_MISC)/entitlements/taskpolicy.xml $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/taskpolicy
+	find $(BUILD_STAGE)/system-cmds -name '.ldid*' -type f -delete
 	chmod u+s $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/{login,passwd}
 endif
 

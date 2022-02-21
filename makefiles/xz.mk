@@ -21,14 +21,16 @@ xz: xz-setup
 		--disable-static \
 		--disable-nls \
 		--disable-encoders \
-		--enable-small \
 		--disable-threads \
 		--disable-liblzma2-compat \
 		--disable-lzmainfo \
-		--disable-scripts \
+		--disable-lzmadec \
 		--disable-lzma-links
 	+$(MAKE) -C $(BUILD_WORK)/xz install \
 		DESTDIR=$(BUILD_STAGE)/xz
+	$(LN_S) xz $(BUILD_STAGE)/xz/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/lzma
+	$(LN_S) xz $(BUILD_STAGE)/xz/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/lzcat
+	$(LN_S) xz $(BUILD_STAGE)/xz/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/unlzma
 	$(call AFTER_BUILD,copy)
 	$(call BINPACK_SIGN,general.xml)
 endif

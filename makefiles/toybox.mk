@@ -24,10 +24,10 @@ toybox: toybox-setup
 	$(MAKE) -C $(BUILD_WORK)/toybox \
 		HOSTCC="$(CC_FOR_BUILD)"
 	$(INSTALL) -m755 $(BUILD_WORK)/toybox/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
-	for tool in bash sh echo chmod cp date dd hostname kill ln ls mkdir mv pwd rm rmdir sleep; do \
+	for tool in bash sh echo cat chmod cp date dd hostname kill ln ls mkdir mv pwd rm rmdir sleep; do \
 		$(LN_S) ../$(MEMO_SUB_PREFIX)/bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/$$tool; \
 	done
-	for tool in clear cut du false find grep fgrep egrep gzip gunzip head hexdump hexedit id killall more nohup printf pwd renice sed seq split stat tail tar tee time true uname w wc which xargs; do \
+	for tool in clear cut du false find grep fgrep egrep gzip gunzip head hexdump hexedit id killall nohup printf pwd renice sed seq split stat tail tar tee time true uname w wc which xargs; do \
 		$(LN_S) toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
 	done
 	$(LN_S) ../bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/chown
