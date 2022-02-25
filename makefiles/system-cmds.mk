@@ -23,8 +23,15 @@ system-cmds:
 	@echo "Using previously built system-cmds."
 else
 system-cmds: system-cmds-setup libxcrypt
+	TOOLS="arch dmesg hostinfo login ltop passwd shutdown sync sysctl taskpolicy "; \
+	if [ "$(shell echo $(MEMO_TARGET) | cut -d- -f1)" != "watchos" ]; then \
+		TOOLS+="lsmp "; \
+	fi; \
+	if [ "$(MEMO_TARGET)" != "watchos-armv7k" ]; then \
+		TOOLS+="sc_usage "; \
+	fi; \
 	cd $(BUILD_WORK)/system-cmds; \
-	for tool in arch dmesg hostinfo login ltop passwd shutdown sc_usage sync sysctl taskpolicy; do \
+	for tool in $$TOOLS; do \
 		EXTRA=; \
 		case $${tool} in \
 			arch) EXTRA="-framework CoreFoundation";; \
@@ -36,13 +43,15 @@ system-cmds: system-cmds-setup libxcrypt
 		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA -Iinclude -I$${tool}.tproj $${tool}.tproj/*.c -o $${tool} -DPRIVATE; \
 	done
 	mkdir -p $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX){/{s,}bin,$(MEMO_SUB_PREFIX)/{s,}bin}
-	install -m 755 $(BUILD_WORK)/system-cmds/{arch,hostinfo,login,passwd,sc_usage} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/
+	[ -e $(BUILD_WORK)/system-cmds/lsmp ] && install -m 755 $(BUILD_WORK)/system-cmds/lsmp $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ || true
+	[ -e $(BUILD_WORK)/system-cmds/sc_usage ] && install -m 755 $(BUILD_WORK)/system-cmds/sc_usage $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ || true
+	install -m 755 $(BUILD_WORK)/system-cmds/{arch,hostinfo,login,passwd} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/
 	install -m 755 $(BUILD_WORK)/system-cmds/sync $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)/bin/
 	install -m 755 $(BUILD_WORK)/system-cmds/{sysctl,ltop,taskpolicy} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/
 	install -m 755 $(BUILD_WORK)/system-cmds/{dmesg,shutdown} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)/sbin/
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
-	#$(LDID) -S$(BUILD_MISC)/entitlements/lsmp.xml $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/lsmp
+	-$(LDID) -S$(BUILD_MISC)/entitlements/lsmp.xml $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/lsmp
 	$(LDID) -S$(BUILD_MISC)/entitlements/taskpolicy.xml $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/taskpolicy
 	find $(BUILD_STAGE)/system-cmds -name '.ldid*' -type f -delete
 	chmod u+s $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/{login,passwd}
