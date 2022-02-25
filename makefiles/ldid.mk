@@ -9,6 +9,7 @@ ldid-setup: setup
 	$(call GITHUB_ARCHIVE,ProcursusTeam,ldid,$(LDID_VERSION),v$(LDID_VERSION))
 	$(call EXTRACT_TAR,ldid-$(LDID_VERSION).tar.gz,ldid-$(LDID_VERSION),ldid)
 	mkdir -p $(BUILD_STAGE)/ldid/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
+	[ ! -e $(BUILD_WORK)/ldid/ldid-arm64_32.patch.done ] && patch -p1 -d $(BUILD_WORK)/ldid < $(BUILD_ROOT)/patches/ldid-arm64_32.patch && touch $(BUILD_WORK)/ldid/ldid-arm64_32.patch.done
 
 ifneq ($(wildcard $(BUILD_WORK)/ldid/.build_complete),)
 ldid:

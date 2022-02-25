@@ -2,7 +2,10 @@ ifneq ($(PROCURSUS),1)
 $(error Use the main Makefile)
 endif
 
-BINPACK_PROJECTS = adv-cmds bzip2 dropbear file-cmds iokittools kext-tools launchctl ldid less ncurses network-cmds plconvert plutil shell-cmds snaputil system-cmds text-cmds toybox uikittools vim xz
+BINPACK_PROJECTS = adv-cmds bzip2 dropbear file-cmds iokittools kext-tools ldid less ncurses network-cmds plconvert plutil shell-cmds snaputil system-cmds text-cmds toybox uikittools vim xz
+ifeq ($(MEMO_TARGET),iphoneos-arm64)
+BINPACK_PROJECTS += launchctl
+endif
 
 binpack-setup: setup
 	@cp -af $(MACOSX_SYSROOT)/usr/include/{curses,ncurses{,_dll},unctrl,termcap,term}.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/

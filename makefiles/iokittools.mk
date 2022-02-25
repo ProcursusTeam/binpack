@@ -21,6 +21,7 @@ else
 iokittools: iokittools-setup
 	$(CC) $(CFLAGS) -isystem $(BUILD_WORK)/iokittools/include -o $(BUILD_STAGE)/iokittools/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/ioreg $(BUILD_WORK)/iokittools/ioreg.tproj/ioreg.c -framework IOKit -framework CoreFoundation -lncurses
 	$(call AFTER_BUILD)
+	$(call BINPACK_SIGN,general.xml)
 endif
 
 .PHONY: iokittools

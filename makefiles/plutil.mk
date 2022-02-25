@@ -8,6 +8,7 @@ PLUTIL_VERSION  := 0.2.2
 plutil-setup: setup
 	wget -q -nc -P $(BUILD_SOURCE) https://github.com/Diatrus/plutil/releases/download/v$(PLUTIL_VERSION)/plutil-$(PLUTIL_VERSION).tar.xz
 	$(call EXTRACT_TAR,plutil-$(PLUTIL_VERSION).tar.xz,plutil-$(PLUTIL_VERSION),plutil)
+	sed -i '/ldid/d' $(BUILD_WORK)/plutil/Makefile
 
 ifneq ($(wildcard $(BUILD_WORK)/plutil/.build_complete),)
 plutil:

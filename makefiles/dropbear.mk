@@ -9,7 +9,7 @@ dropbear-setup: setup
 	wget -q -nc -P $(BUILD_SOURCE) https://github.com/mkj/dropbear/archive/DROPBEAR_2020.81.tar.gz
 	$(call EXTRACT_TAR,DROPBEAR_$(DROPBEAR_VERSION).tar.gz,dropbear-DROPBEAR_$(DROPBEAR_VERSION),dropbear)
 	$(call DO_PATCH,dropbear,dropbear,-p1)
-	[ ! -e $(BUILD_WORK)/dropbear/dropbear-shell-override.patch.done ] && patch -p1 -d $(BUILD_WORK)/dropbear < $(BUILD_ROOT)/dropbear-shell-override.patch && touch $(BUILD_WORK)/dropbear/dropbear-shell-override.patch.done
+	[ ! -e $(BUILD_WORK)/dropbear/dropbear-overrides.patch.done ] && patch -p1 -d $(BUILD_WORK)/dropbear < $(BUILD_ROOT)/patches/dropbear-overrides.patch && touch $(BUILD_WORK)/dropbear/dropbear-overrides.patch.done
 
 ifneq ($(wildcard $(BUILD_WORK)/dropbear/.build_complete),)
 dropbear:
@@ -41,6 +41,7 @@ dropbear: dropbear-setup
 	$(LN_S) dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/scp
 	$(LN_S) ../bin/dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/dropbear
 	$(call AFTER_BUILD)
+	$(call BINPACK_SIGN,general.xml)
 endif
 
 .PHONY: dropbear

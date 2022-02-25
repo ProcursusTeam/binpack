@@ -1,6 +1,6 @@
 diff --color -urN dropbear-DROPBEAR_2020.81/common-session.c dropbear/common-session.c
 --- dropbear-DROPBEAR_2020.81/common-session.c	2020-10-29 13:35:50.000000000 +0000
-+++ dropbear/common-session.c	2022-02-21 20:19:01.310002320 +0000
++++ dropbear/common-session.c	2022-02-21 21:56:58.817969572 +0000
 @@ -610,6 +610,8 @@
  }
  
@@ -12,33 +12,53 @@ diff --color -urN dropbear-DROPBEAR_2020.81/common-session.c dropbear/common-ses
  		return "/bin/sh";
 diff --color -urN dropbear-DROPBEAR_2020.81/runopts.h dropbear/runopts.h
 --- dropbear-DROPBEAR_2020.81/runopts.h	2020-10-29 13:35:50.000000000 +0000
-+++ dropbear/runopts.h	2022-02-21 20:19:23.233552819 +0000
-@@ -129,6 +129,7 @@
++++ dropbear/runopts.h	2022-02-21 23:56:43.192184202 +0000
+@@ -129,6 +129,8 @@
          char *pubkey_plugin;
          char *pubkey_plugin_options;
  #endif
 +	char *shell;
++	char *path;
  
  } svr_runopts;
  
+diff --color -urN dropbear-DROPBEAR_2020.81/svr-chansession.c dropbear/svr-chansession.c
+--- dropbear-DROPBEAR_2020.81/svr-chansession.c	2020-10-29 13:35:50.000000000 +0000
++++ dropbear/svr-chansession.c	2022-02-21 23:56:30.518828890 +0000
+@@ -981,7 +981,10 @@
+ 	addnewvar("LOGNAME", ses.authstate.pw_name);
+ 	addnewvar("HOME", ses.authstate.pw_dir);
+ 	addnewvar("SHELL", get_user_shell());
+-	addnewvar("PATH", DEFAULT_PATH);
++	if (svr_opts.path == NULL)
++		addnewvar("PATH", DEFAULT_PATH);
++	else
++		addnewvar("PATH", svr_opts.path);
+ 	if (chansess->term != NULL) {
+ 		addnewvar("TERM", chansess->term);
+ 	}
 diff --color -urN dropbear-DROPBEAR_2020.81/svr-runopts.c dropbear/svr-runopts.c
 --- dropbear-DROPBEAR_2020.81/svr-runopts.c	2020-10-29 13:35:50.000000000 +0000
-+++ dropbear/svr-runopts.c	2022-02-21 20:17:48.767942048 +0000
-@@ -173,6 +173,7 @@
++++ dropbear/svr-runopts.c	2022-02-21 23:57:47.513652052 +0000
+@@ -173,6 +173,8 @@
          svr_opts.pubkey_plugin = NULL;
          svr_opts.pubkey_plugin_options = NULL;
  #endif
 +	svr_opts.shell = NULL;
++	svr_opts.path = NULL;
  
  #ifndef DISABLE_ZLIB
  	opts.compress_mode = DROPBEAR_COMPRESS_DELAYED;
-@@ -284,6 +285,9 @@
- 					svr_opts.allowblankpass = 1;
+@@ -305,6 +307,12 @@
+ 					print_version();
+ 					exit(EXIT_SUCCESS);
  					break;
- #endif
 +				case 'S':
 +					next = &svr_opts.shell;
 +					break;
- 				case 'h':
++				case 'H':
++					next = &svr_opts.path;
++					break;
+ 				default:
+ 					fprintf(stderr, "Invalid option -%c\n", c);
  					printhelp(argv[0]);
- 					exit(EXIT_SUCCESS);
