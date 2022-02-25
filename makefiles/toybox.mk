@@ -13,14 +13,22 @@ toybox-setup: setup
 	sed -i 's|syscall(__NR_|syscall(|g' $(BUILD_WORK)/toybox/toys/other/ionice.c
 	sed -i 's|UT_LINESIZE|_UTX_LINESIZE|g' $(BUILD_WORK)/toybox/toys/pending/last.c
 	sed -i -e 's/-Wl,--gc-sections//g' -e 's/-Wl,--as-needed//g' $(BUILD_WORK)/toybox/configure
+ifeq ($(BINPACK_THICK),1)
+	cp -a $(BUILD_ROOT)/toybox-thick-config $(BUILD_WORK)/toybox/.config
+else
 	cp -a $(BUILD_ROOT)/toybox-config $(BUILD_WORK)/toybox/.config
+endif
 	mkdir -p $(BUILD_STAGE)/toybox/$(MEMO_PREFIX){$(MEMO_SUB_PREFIX),}/{s,}bin
 
 ifneq ($(wildcard $(BUILD_WORK)/toybox/.build_complete),)
 toybox:
 	@echo "Using previously built toybox."
 else
-toybox: toybox-setup 
+ifeq ($(BINPACK_THICK),1)
+toybox: toybox-setup openssl
+else
+toybox: toybox-setup
+endif
 	$(MAKE) -C $(BUILD_WORK)/toybox \
 		HOSTCC="$(CC_FOR_BUILD)"
 	$(INSTALL) -m755 $(BUILD_WORK)/toybox/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
@@ -31,6 +39,14 @@ toybox: toybox-setup
 		$(LN_S) toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
 	done
 	$(LN_S) ../bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/chown
+ifeq ($(BINPACK_THICK),1)
+	for tool in expr link unlink; do \
+		$(LN_S) ../$(MEMO_SUB_PREFIX)/bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/$$tool; \
+	done
+	for tool in basename cal chgrp cmp diff base64 cksum comm cpio crc32 env expand getconf groups install last logger logname mkfifo nice nl od paste patch printenv readlink rev sort strings tftp touch tr uniq who whoami yes realpath md5sum sha1sum sha224sum sha256sum sha384sum sha512sum pidof test telnet truncate watch; do \
+		$(LN_S) toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
+	done
+endif
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,dd.xml)
 endif

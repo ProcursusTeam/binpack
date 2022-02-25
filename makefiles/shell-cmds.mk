@@ -19,7 +19,7 @@ shell-cmds: shell-cmds-setup
 	mkdir -p $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
 	-cd $(BUILD_WORK)/shell-cmds; \
 	for bin in script what; do \
-		$(CC) $(CFLAGS) -o $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$bin $$bin/*.c -D'__FBSDID(x)=' -save-temps; \
+		$(CC) $(CFLAGS) -o $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$bin $$bin/*.c -D'__FBSDID(x)='; \
 	done
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)

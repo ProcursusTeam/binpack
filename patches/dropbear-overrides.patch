@@ -1,6 +1,6 @@
 diff --color -urN dropbear-DROPBEAR_2020.81/common-session.c dropbear/common-session.c
 --- dropbear-DROPBEAR_2020.81/common-session.c	2020-10-29 13:35:50.000000000 +0000
-+++ dropbear/common-session.c	2022-02-21 21:56:58.817969572 +0000
++++ dropbear/common-session.c	2022-02-25 16:25:56.502334472 +0000
 @@ -610,6 +610,8 @@
  }
  
@@ -12,20 +12,21 @@ diff --color -urN dropbear-DROPBEAR_2020.81/common-session.c dropbear/common-ses
  		return "/bin/sh";
 diff --color -urN dropbear-DROPBEAR_2020.81/runopts.h dropbear/runopts.h
 --- dropbear-DROPBEAR_2020.81/runopts.h	2020-10-29 13:35:50.000000000 +0000
-+++ dropbear/runopts.h	2022-02-21 23:56:43.192184202 +0000
-@@ -129,6 +129,8 @@
++++ dropbear/runopts.h	2022-02-25 16:26:40.404943824 +0000
+@@ -129,6 +129,9 @@
          char *pubkey_plugin;
          char *pubkey_plugin_options;
  #endif
 +	char *shell;
 +	char *path;
++	char *terminfo;
  
  } svr_runopts;
  
 diff --color -urN dropbear-DROPBEAR_2020.81/svr-chansession.c dropbear/svr-chansession.c
 --- dropbear-DROPBEAR_2020.81/svr-chansession.c	2020-10-29 13:35:50.000000000 +0000
-+++ dropbear/svr-chansession.c	2022-02-21 23:56:30.518828890 +0000
-@@ -981,7 +981,10 @@
++++ dropbear/svr-chansession.c	2022-02-25 16:27:25.929577914 +0000
+@@ -981,7 +981,14 @@
  	addnewvar("LOGNAME", ses.authstate.pw_name);
  	addnewvar("HOME", ses.authstate.pw_dir);
  	addnewvar("SHELL", get_user_shell());
@@ -34,22 +35,27 @@ diff --color -urN dropbear-DROPBEAR_2020.81/svr-chansession.c dropbear/svr-chans
 +		addnewvar("PATH", DEFAULT_PATH);
 +	else
 +		addnewvar("PATH", svr_opts.path);
++
++	if (svr_opts.terminfo != NULL)
++		addnewvar("TERMINFO", svr_opts.terminfo);
++
  	if (chansess->term != NULL) {
  		addnewvar("TERM", chansess->term);
  	}
 diff --color -urN dropbear-DROPBEAR_2020.81/svr-runopts.c dropbear/svr-runopts.c
 --- dropbear-DROPBEAR_2020.81/svr-runopts.c	2020-10-29 13:35:50.000000000 +0000
-+++ dropbear/svr-runopts.c	2022-02-21 23:57:47.513652052 +0000
-@@ -173,6 +173,8 @@
++++ dropbear/svr-runopts.c	2022-02-25 16:28:37.173908177 +0000
+@@ -173,6 +173,9 @@
          svr_opts.pubkey_plugin = NULL;
          svr_opts.pubkey_plugin_options = NULL;
  #endif
 +	svr_opts.shell = NULL;
 +	svr_opts.path = NULL;
++	svr_opts.terminfo = NULL;
  
  #ifndef DISABLE_ZLIB
  	opts.compress_mode = DROPBEAR_COMPRESS_DELAYED;
-@@ -305,6 +307,12 @@
+@@ -305,6 +308,15 @@
  					print_version();
  					exit(EXIT_SUCCESS);
  					break;
@@ -58,6 +64,9 @@ diff --color -urN dropbear-DROPBEAR_2020.81/svr-runopts.c dropbear/svr-runopts.c
 +					break;
 +				case 'H':
 +					next = &svr_opts.path;
++					break;
++				case 't':
++					next = &svr_opts.terminfo;
 +					break;
  				default:
  					fprintf(stderr, "Invalid option -%c\n", c);
