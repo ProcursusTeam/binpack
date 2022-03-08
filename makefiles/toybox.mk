@@ -35,7 +35,7 @@ endif
 	for tool in bash sh echo cat chmod cp date dd hostname kill ln ls mkdir mv pwd rm rmdir sleep; do \
 		$(LN_S) ../$(MEMO_SUB_PREFIX)/bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/$$tool; \
 	done
-	for tool in clear cut du false find grep fgrep egrep gzip gunzip head hexdump hexedit id killall nohup printf pwd renice sed seq split stat tail tar tee time true uname w wc which xargs; do \
+	for tool in clear cut du false find grep fgrep egrep gzip gunzip head hexdump hexedit id killall nohup printf pwd renice sed seq split stat tail tee time true uname w wc which xargs; do \
 		$(LN_S) toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
 	done
 	$(LN_S) ../bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/chown
