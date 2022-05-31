@@ -2,12 +2,15 @@ ifneq ($(PROCURSUS),1)
 $(error Use the main Makefile)
 endif
 
+BINPACK_TARBALL  = binpack
+
 BINPACK_PROJECTS = adv-cmds bzip2 dropbear file-cmds iokittools kext-tools ldid less libarchive ncurses network-cmds plconvert plutil shell-cmds snaputil system-cmds text-cmds toybox uikittools vim xz
 ifeq ($(MEMO_TARGET),iphoneos-arm64)
 BINPACK_PROJECTS += launchctl
 endif
 ifeq ($(BINPACK_THICK),1)
 BINPACK_PROJECTS += defaults
+BINPACK_TARBALL  = binpack-thick
 endif
 
 binpack-setup: setup
@@ -30,13 +33,9 @@ endif
 		cp -af $(BUILD_STAGE)/$$proj/* $(BUILD_STRAP)/binpack; \
 	done
 	rm -rf $(BUILD_STRAP)/binpack/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/{include,lib,share/{doc,man}}
-ifneq ($(BINPACK_THICK),1)
-	cd $(BUILD_STRAP)/binpack; fakeroot -i $(BUILD_DIST)/.fakeroot_bootstrap -s $(BUILD_DIST)/.fakeroot_bootstrap -- \
-		tar -ckpf $(BUILD_STRAP)/binpack.tar .
-else
-	cd $(BUILD_STRAP)/binpack; fakeroot -i $(BUILD_DIST)/.fakeroot_bootstrap -s $(BUILD_DIST)/.fakeroot_bootstrap -- \
-		tar -ckpf $(BUILD_STRAP)/binpack-thick.tar .
-endif
+	cd $(BUILD_STRAP)/binpack; mtree -c | sed -e 's/uid=[0-9]* /uid=0 /' -e 's/gid=[0-9]* /gid=0 /' > $(BUILD_STRAP)/$(BINPACK_TARBALL).mtree
+	cd $(BUILD_STRAP)/binpack; bsdtar -cf $(BUILD_STRAP)/$(BINPACK_TARBALL).tar @$(BUILD_STRAP)/$(BINPACK_TARBALL).mtree
+	-tc create $(BUILD_STRAP)/$(BINPACK_TARBALL).tc $(BUILD_STRAP)/binpack
 	rm -rf $(BUILD_STRAP)/binpack
 	
 BINPACK_SIGN = for file in $$(find $(BUILD_STAGE)/$@ -type f -exec sh -c "file -ib '{}' | grep -q 'x-mach-binary; charset=binary'" \; -print); do \

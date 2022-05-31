@@ -32,6 +32,12 @@ openssl: openssl-setup
 			lib_cppflags     => add(\"-DL_ENDIAN\"),\n\
 			perlasm_scheme   => \"ios64\",\n\
 		},\n\
+		\"darwin64-arm64e\" => {\n\
+			inherit_from     => [ \"darwin64-arm64\" ],\n\
+			CC               => add(\"-Wall\"),\n\
+			cflags           => add(\"-arch arm64e\"),\n\
+			perlasm_scheme   => \"ios64\",\n\
+		},\n\
 	);" > $(BUILD_WORK)/openssl/Configurations/15-openssl.conf
 	cd $(BUILD_WORK)/openssl && ./Configure \
 		--prefix=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \

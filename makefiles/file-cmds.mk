@@ -9,12 +9,12 @@ STRAPPROJECTS     += file-cmds
 ifeq ($(shell [ "$(CFVER_WHOLE)" -lt 1600 ] && echo 1),1)
 FILE-CMDS_VERSION := 272.250.1
 else
-FILE-CMDS_VERSION := 287.40.2
+FILE-CMDS_VERSION := 353.100.22
 endif
 
 file-cmds-setup: setup
-	wget -q -nc -P $(BUILD_SOURCE) https://opensource.apple.com/tarballs/file_cmds/file_cmds-$(FILE-CMDS_VERSION).tar.gz
-	$(call EXTRACT_TAR,file_cmds-$(FILE-CMDS_VERSION).tar.gz,file_cmds-$(FILE-CMDS_VERSION),file-cmds)
+	$(call GITHUB_ARCHIVE,apple-oss-distributions,file_cmds,$(FILE-CMDS_VERSION),file_cmds-$(FILE-CMDS_VERSION))
+	$(call EXTRACT_TAR,file_cmds-$(FILE-CMDS_VERSION).tar.gz,file_cmds-file_cmds-$(FILE-CMDS_VERSION),file-cmds)
 	mkdir -p $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX){/sbin,$(MEMO_SUB_PREFIX)/bin}
 
 ifneq ($(wildcard $(BUILD_WORK)/file-cmds/.build_complete),)
@@ -24,6 +24,7 @@ else
 file-cmds: file-cmds-setup
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/sbin/mknod $(BUILD_WORK)/file-cmds/mknod/mknod.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/chflags $(BUILD_WORK)/file-cmds/chflags/chflags.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/xattr $(BUILD_WORK)/file-cmds/xattr/xattr.c
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
 endif
