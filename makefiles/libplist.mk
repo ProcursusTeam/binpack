@@ -4,7 +4,6 @@ endif
 
 SUBPROJECTS       += libplist
 LIBPLIST_VERSION  := 2.2.0
-DEB_LIBPLIST_V    ?= $(LIBPLIST_VERSION)
 
 libplist-setup: setup
 	$(call GITHUB_ARCHIVE,libimobiledevice,libplist,$(LIBPLIST_VERSION),$(LIBPLIST_VERSION))

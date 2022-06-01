@@ -4,7 +4,6 @@ endif
 
 SUBPROJECTS        += iokittools
 IOKITTOOLS_VERSION := 91
-DEB_IOKITTOOLS_V   ?= $(IOKITTOOLS_VERSION)
 
 iokittools-setup: setup
 	wget -q -nc -P $(BUILD_SOURCE) https://opensource.apple.com/tarballs/IOKitTools/IOKitTools-$(IOKITTOOLS_VERSION).tar.gz

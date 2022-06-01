@@ -4,7 +4,6 @@ endif
 
 STRAPPROJECTS    += snaputil
 SNAPUTIL_VERSION := 12.3
-DEB_SNAPUTIL_V   ?= $(SNAPUTIL_VERSION)
 
 snaputil-setup: setup
 	$(call GITHUB_ARCHIVE,ahl,apfs,$(SNAPUTIL_VERSION),v$(SNAPUTIL_VERSION),snaputil)

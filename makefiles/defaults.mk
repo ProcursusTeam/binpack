@@ -4,7 +4,6 @@ endif
 
 SUBPROJECTS      += defaults
 DEFAULTS_VERSION := 1.0.1
-DEB_DEFAULTS_V   ?= $(DEFAULTS_VERSION)
 
 defaults-setup: setup
 	$(call GITHUB_ARCHIVE,ProcursusTeam,defaults,$(DEFAULTS_VERSION),v$(DEFAULTS_VERSION))
