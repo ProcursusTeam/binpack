@@ -44,6 +44,7 @@ openssl: openssl-setup
 		--openssldir=$(MEMO_PREFIX)/etc/ssl \
 		no-shared \
 		no-tests \
+		no-module \
 		darwin64-$$(echo $(LLVM_TARGET) | cut -f1 -d-)
 	+$(MAKE) -C $(BUILD_WORK)/openssl
 	+$(MAKE) -C $(BUILD_WORK)/openssl install_sw \
