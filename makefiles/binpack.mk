@@ -4,7 +4,7 @@ endif
 
 BINPACK_TARBALL  = binpack
 
-BINPACK_PROJECTS = adv-cmds bzip2 dropbear file-cmds iokittools kext-tools ldid less libarchive ncurses network-cmds plconvert plutil shell-cmds snaputil system-cmds tc text-cmds toybox uikittools vim xz
+BINPACK_PROJECTS = adv-cmds bzip2 dropbear file-cmds iokittools kext-tools ldid less libarchive ncurses network-cmds plconvert plutil shell-cmds snaputil system-cmds trustcache text-cmds toybox uikittools vim xz
 ifeq ($(MEMO_TARGET),iphoneos-arm64)
 BINPACK_PROJECTS += launchctl
 endif
@@ -40,9 +40,9 @@ endif
 	
 BINPACK_SIGN = for file in $$(find $(BUILD_STAGE)/$@ -type f -exec sh -c "file -ib '{}' | grep -q 'x-mach-binary; charset=binary'" \; -print); do \
 			if [ $${file\#\#*.} = "dylib" ] || [ $${file\#\#*.} = "bundle" ] || [ $${file\#\#*.} = "so" ]; then \
-				$(LDID) -S $$file; \
+				$(LDID) -Hsha256 -S $$file; \
 			else \
-				$(LDID) -S$(BUILD_MISC)/entitlements/$(1) $$file; \
+				$(LDID) -Hsha256 -S$(BUILD_MISC)/entitlements/$(1) $$file; \
 			fi; \
 		done; \
 

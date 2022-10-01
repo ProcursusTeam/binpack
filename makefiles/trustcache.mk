@@ -2,7 +2,7 @@ ifneq ($(PROCURSUS),1)
 $(error Use the main Makefile)
 endif
 
-SUBPROJECTS += trustcache
+SUBPROJECTS         += trustcache
 TRUSTCACHE_VERSION  := 1.0
 
 trustcache-setup: setup
