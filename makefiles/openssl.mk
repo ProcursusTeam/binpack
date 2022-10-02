@@ -6,7 +6,7 @@ STRAPPROJECTS   += openssl
 OPENSSL_VERSION := 3.0.5
 
 openssl-setup: setup
-	wget -q -nc -P $(BUILD_SOURCE) https://www.openssl.org/source/openssl-$(OPENSSL_VERSION).tar.gz{,.asc}
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://www.openssl.org/source/openssl-$(OPENSSL_VERSION).tar.gz{$(comma).asc})
 	$(call PGP_VERIFY,openssl-$(OPENSSL_VERSION).tar.gz,asc)
 	$(call EXTRACT_TAR,openssl-$(OPENSSL_VERSION).tar.gz,openssl-$(OPENSSL_VERSION),openssl)
 

@@ -6,7 +6,7 @@ SUBPROJECTS        += iokittools
 IOKITTOOLS_VERSION := 91
 
 iokittools-setup: setup
-	wget -q -nc -P $(BUILD_SOURCE) https://opensource.apple.com/tarballs/IOKitTools/IOKitTools-$(IOKITTOOLS_VERSION).tar.gz
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://opensource.apple.com/tarballs/IOKitTools/IOKitTools-$(IOKITTOOLS_VERSION).tar.gz)
 	$(call EXTRACT_TAR,IOKitTools-$(IOKITTOOLS_VERSION).tar.gz,IOKitTools-$(IOKITTOOLS_VERSION),iokittools)
 	mkdir -p $(BUILD_STAGE)/iokittools/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin
 	mkdir -p $(BUILD_WORK)/iokittools/include/IOKit

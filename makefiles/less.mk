@@ -6,7 +6,7 @@ SUBPROJECTS  += less
 LESS_VERSION := 590
 
 less-setup: setup
-	wget -q -nc -P $(BUILD_SOURCE) http://www.greenwoodsoftware.com/less/less-$(LESS_VERSION).tar.gz
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),http://www.greenwoodsoftware.com/less/less-$(LESS_VERSION).tar.gz)
 	$(call EXTRACT_TAR,less-$(LESS_VERSION).tar.gz,less-$(LESS_VERSION),less)
 
 ifneq ($(wildcard $(BUILD_WORK)/less/.build_complete),)
