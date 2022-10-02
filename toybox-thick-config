@@ -161,7 +161,7 @@ CONFIG_LAST=y
 # CONFIG_OPENVT is not set
 # CONFIG_DEALLOCVT is not set
 # CONFIG_ROUTE is not set
-CONFIG_SH=y
+# CONFIG_SH is not set
 # CONFIG_CD is not set
 # CONFIG_DECLARE is not set
 # CONFIG_EXIT is not set

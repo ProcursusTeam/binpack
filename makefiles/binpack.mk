@@ -9,7 +9,7 @@ ifeq ($(MEMO_TARGET),iphoneos-arm64)
 BINPACK_PROJECTS += launchctl
 endif
 ifeq ($(BINPACK_THICK),1)
-BINPACK_PROJECTS += defaults
+BINPACK_PROJECTS += defaults bash
 BINPACK_TARBALL  = binpack-thick
 endif
 

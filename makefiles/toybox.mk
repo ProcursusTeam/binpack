@@ -40,6 +40,7 @@ endif
 	done
 	$(LN_S) ../bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/chown
 ifeq ($(BINPACK_THICK),1)
+	rm -f $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/bash $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/sh
 	for tool in expr link unlink; do \
 		$(LN_S) ../$(MEMO_SUB_PREFIX)/bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/$$tool; \
 	done
