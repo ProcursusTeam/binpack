@@ -18,7 +18,7 @@ defaults: defaults-setup
 	$(INSTALL) -d $(BUILD_STAGE)/defaults/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
 	$(INSTALL) -m755 $(BUILD_WORK)/defaults/defaults $(BUILD_STAGE)/defaults/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/defaults
 	$(call AFTER_BUILD)
-	$(LDID) -S$(BUILD_WORK)/defaults/ent.plist $(BUILD_DIST)/defaults/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/defaults
+	$(LDID) -Hsha256 -S$(BUILD_WORK)/defaults/ent.plist $(BUILD_STAGE)/defaults/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/defaults
 endif
 
 .PHONY: defaults
