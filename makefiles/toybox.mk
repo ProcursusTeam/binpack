@@ -32,17 +32,16 @@ endif
 	$(MAKE) -C $(BUILD_WORK)/toybox \
 		HOSTCC="$(CC_FOR_BUILD)"
 	$(INSTALL) -m755 $(BUILD_WORK)/toybox/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
-	for tool in bash sh echo cat chmod cp date dd hostname kill ln ls mkdir mv pwd rm rmdir sleep; do \
-		$(LN_S) ../$(MEMO_SUB_PREFIX)/bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/$$tool; \
+	for tool in echo cat chmod cp date dd hostname kill ln ls mkdir mv pwd rm rmdir sleep; do \
+		$(LN_S) ..$(MEMO_SUB_PREFIX)/bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/$$tool; \
 	done
 	for tool in clear cut du false find grep fgrep egrep gzip gunzip head hexdump hexedit id nohup printf pwd renice sed seq split stat tail tee time true uname w wc which xargs; do \
 		$(LN_S) toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
 	done
 	$(LN_S) ../bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/chown
 ifeq ($(BINPACK_THICK),1)
-	rm -f $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/bash $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/sh
 	for tool in expr link unlink; do \
-		$(LN_S) ../$(MEMO_SUB_PREFIX)/bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/$$tool; \
+		$(LN_S) ..$(MEMO_SUB_PREFIX)/bin/toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)/bin/$$tool; \
 	done
 	for tool in basename cal chgrp cmp diff base64 cksum comm cpio crc32 env expand getconf groups install last logger logname mkfifo nice nl od paste patch printenv readlink rev sort strings tftp touch tr uniq who whoami yes realpath md5sum sha1sum sha224sum sha256sum sha384sum sha512sum pidof test telnet truncate watch; do \
 		$(LN_S) toybox $(BUILD_STAGE)/toybox/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
