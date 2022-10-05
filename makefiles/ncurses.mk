@@ -24,7 +24,7 @@ ncurses: ncurses-setup
 	for tool in toe tput tset; do \
 		$(CC) $(CFLAGS) $(LDFLAGS) -D_XOPEN_SOURCE_EXTENDED -Iinclude -Iprogs -lncurses progs/$${tool}.c -o $(BUILD_STAGE)/ncurses/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
 	done; \
-	for tool in infocmp tic; do \
+	for tool in clear infocmp tic; do \
 		$(CC) $(CFLAGS) $(LDFLAGS) -D_XOPEN_SOURCE_EXTENDED -Iinclude -Iprogs -lncurses progs/dump_entry.c progs/$${tool}.c -o $(BUILD_STAGE)/ncurses/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
 	done
 	$(LN_S) tset $(BUILD_STAGE)/ncurses/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/reset
