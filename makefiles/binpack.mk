@@ -16,7 +16,9 @@ endif
 binpack-setup: setup
 	@cp -af $(MACOSX_SYSROOT)/usr/include/{curses,ncurses{,_dll},unctrl,termcap,term}.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/
 	@cp -af $(MACOSX_SYSROOT)/usr/include/get_compat.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/
+	@cp -af $(MACOSX_SYSROOT)/usr/include/timeconv.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/
 	@cp -af $(MACOSX_SYSROOT)/usr/include/sys/ioctl_compat.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/sys
+	@cp -af $(MACOSX_SYSROOT)/usr/include/protocols $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/
 	$(call DOWNLOAD_FILES,$(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include,https://raw.githubusercontent.com/apple-oss-distributions/Libinfo/main/membership.subproj/membershipPriv.h)
 
 binpack: 
