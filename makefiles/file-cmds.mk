@@ -51,6 +51,7 @@ ifeq ($(shell [ "$(CFVER_WHOLE)" -gt 1500 ] && echo 1),1) # xattr is only availa
 endif
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
+	$(LDID) -Hsha256 -S$(BUILD_MISC)/entitlements/dd.xml $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/bin/dd
 endif
 
 .PHONY: file-cmds

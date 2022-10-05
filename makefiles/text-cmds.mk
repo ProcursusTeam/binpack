@@ -39,6 +39,7 @@ text-cmds: text-cmds-setup bzip2 xz
 	$(LN_S) grep $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/fgrep
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
+	$(LDID) -Hsha256 -S$(BUILD_MISC)/entitlements/dd.xml $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/bin/cat
 endif
 
 .PHONY: text-cmds
