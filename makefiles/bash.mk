@@ -49,6 +49,7 @@ bash: bash-setup readline
 	install -m755 $(BUILD_WORK)/bash/bash $(BUILD_STAGE)/bash/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/
 	$(LN_S) ../usr/bin/bash $(BUILD_STAGE)/bash/$(MEMO_PREFIX)/bin/bash
 	$(call AFTER_BUILD)
+	$(call BINPACK_SIGN,general.xml)
 endif
 
 .PHONY: bash
