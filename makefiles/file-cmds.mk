@@ -15,7 +15,7 @@ endif
 file-cmds-setup: setup binpack-setup
 	$(call GITHUB_ARCHIVE,apple-oss-distributions,file_cmds,$(FILE-CMDS_VERSION),file_cmds-$(FILE-CMDS_VERSION))
 	$(call EXTRACT_TAR,file_cmds-$(FILE-CMDS_VERSION).tar.gz,file_cmds-file_cmds-$(FILE-CMDS_VERSION),file-cmds)
-	sed -i '/unistd.h/ s/$$/\nint expand_number(const char *buf, uint64_t *num);/' $(BUILD_WORK)/file-cmds/du/du.c
+	sed -i '/libutil.h/ s/$$/\nint expand_number(const char *buf, uint64_t *num);/' $(BUILD_WORK)/file-cmds/du/du.c
 	rm $(BUILD_WORK)/file-cmds/dd/gen.c
 	mkdir -p $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX){,$(MEMO_SUB_PREFIX)}/{,s}bin
 
