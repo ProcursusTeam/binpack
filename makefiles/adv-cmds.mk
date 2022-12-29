@@ -5,11 +5,11 @@ endif
 ifeq (,$(findstring darwin,$(MEMO_TARGET)))
 
 SUBPROJECTS      += adv-cmds
-ADV-CMDS_VERSION := 176
+ADV-CMDS_VERSION := 199.0.1
 
 adv-cmds-setup: setup binpack-setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://opensource.apple.com/tarballs/adv_cmds/adv_cmds-$(ADV-CMDS_VERSION).tar.gz)
-	$(call EXTRACT_TAR,adv_cmds-$(ADV-CMDS_VERSION).tar.gz,adv_cmds-$(ADV-CMDS_VERSION),adv-cmds)
+	$(call GITHUB_ARCHIVE,apple-oss-distributions,adv_cmds,$(ADV-CMDS_VERSION),adv_cmds-$(ADV-CMDS_VERSION))
+	$(call EXTRACT_TAR,adv_cmds-$(ADV-CMDS_VERSION).tar.gz,adv_cmds-adv_cmds-$(ADV-CMDS_VERSION),adv-cmds)
 	mkdir -p $(BUILD_STAGE)/adv-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
 
 ifneq ($(wildcard $(BUILD_WORK)/adv-cmds/.build_complete),)
