@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 STRAPPROJECTS   += openssl
-OPENSSL_VERSION := 3.0.5
+OPENSSL_VERSION := 3.0.7
 
 openssl-setup: setup
 	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://www.openssl.org/source/openssl-$(OPENSSL_VERSION).tar.gz{$(comma).asc})
