@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS     += ncurses
-NCURSES_VERSION := 57
+NCURSES_VERSION := 61
 
 ncurses-setup: setup binpack-setup
 	$(call GITHUB_ARCHIVE,apple-oss-distributions,ncurses,$(NCURSES_VERSION),ncurses-$(NCURSES_VERSION))

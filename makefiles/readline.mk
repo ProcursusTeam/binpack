@@ -16,7 +16,7 @@ ifneq ($(wildcard $(BUILD_WORK)/readline/.build_complete),)
 readline:
 	@echo "Using previously built readline."
 else
-readline: readline-setup ncurses
+readline: readline-setup
 	cd $(BUILD_WORK)/readline && ./configure -C \
 		$(DEFAULT_CONFIGURE_FLAGS) \
 		--disable-shared \
