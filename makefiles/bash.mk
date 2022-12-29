@@ -3,9 +3,9 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS     += bash
-BASH_VERSION    := 5.2
+BASH_VERSION    := 5.2.15
 BASH_PATCHLEVEL := 0
-DEB_BASH_V      ?= $(BASH_VERSION).$(BASH_PATCHLEVEL)
+DEB_BASH_V      ?= $(BASH_VERSION)
 
 bash-setup: setup
 	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://ftpmirror.gnu.org/bash/bash-$(BASH_VERSION).tar.gz{$(comma).sig})
@@ -48,6 +48,7 @@ bash: bash-setup readline
 	install -d $(BUILD_STAGE)/bash/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/
 	install -m755 $(BUILD_WORK)/bash/bash $(BUILD_STAGE)/bash/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/
 	$(LN_S) ../usr/bin/bash $(BUILD_STAGE)/bash/$(MEMO_PREFIX)/bin/bash
+	$(LN_S) ../usr/bin/bash $(BUILD_STAGE)/bash/$(MEMO_PREFIX)/bin/sh
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
 endif
