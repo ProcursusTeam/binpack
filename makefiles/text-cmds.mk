@@ -5,7 +5,7 @@ endif
 ifeq (,$(findstring darwin,$(MEMO_TARGET)))
 
 SUBPROJECTS       += text-cmds
-TEXT-CMDS_VERSION := 138.100.3
+TEXT-CMDS_VERSION := 154
 
 text-cmds-setup: setup binpack-setup
 	$(call GITHUB_ARCHIVE,apple-oss-distributions,text_cmds,$(TEXT-CMDS_VERSION),text_cmds-$(TEXT-CMDS_VERSION))
