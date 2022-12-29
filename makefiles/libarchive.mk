@@ -22,6 +22,7 @@ libarchive: libarchive-setup
 		../libarchive_fe/err.c ../libarchive_fe/line_reader.c ../libarchive_fe/passphrase.c \
 		$(LDFLAGS) -larchive \
 		-o $(BUILD_STAGE)/libarchive/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/tar
+	$(LN_S) tar $(BUILD_STAGE)/libarchive/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/bsdtar
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
 endif
