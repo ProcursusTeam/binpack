@@ -16,13 +16,13 @@ bzip2:
 	@echo "Using previously built bzip2."
 else
 bzip2: bzip2-setup
-	+$(MAKE) -C $(BUILD_WORK)/bzip2 bzip2{,recover} \
+	+$(MAKE) -C $(BUILD_WORK)/bzip2 bzip2 \
 		PREFIX=$(BUILD_STAGE)/bzip2/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX) \
 		CC=$(CC) \
 		AR=$(AR) \
 		RANLIB=$(RANLIB) \
 		CFLAGS="$(CFLAGS)"
-	install -m755 $(BUILD_WORK)/bzip2/bzip2{,recover} $(BUILD_STAGE)/bzip2/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
+	install -m755 $(BUILD_WORK)/bzip2/bzip2 $(BUILD_STAGE)/bzip2/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
 	$(LN_S) bzip2 $(BUILD_STAGE)/bzip2/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/bzcat
 	$(LN_S) bzip2 $(BUILD_STAGE)/bzip2/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/bunzip2
 	$(call AFTER_BUILD)

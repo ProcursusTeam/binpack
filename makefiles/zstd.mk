@@ -16,9 +16,9 @@ zstd:
 	@echo "Using previously built zstd."
 else
 zstd: zstd-setup
-	+$(MAKE) -C $(BUILD_WORK)/zstd/programs zstd-small
+	+$(MAKE) -C $(BUILD_WORK)/zstd/programs zstd-decompress
 	install -d $(BUILD_STAGE)/zstd/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
-	install -m755 $(BUILD_WORK)/zstd/programs/zstd-small $(BUILD_STAGE)/zstd/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/zstd
+	install -m755 $(BUILD_WORK)/zstd/programs/zstd-decompress $(BUILD_STAGE)/zstd/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/zstd
 	$(call AFTER_BUILD,copy)
 endif
 
