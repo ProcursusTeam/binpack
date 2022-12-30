@@ -25,7 +25,6 @@ ifeq ($(shell [ "$(CFVER_WHOLE)" -lt 1800 ] && echo 1),1)
 else
 	$(call DO_PATCH,system-cmds-ios15,system-cmds,-p1)
 endif
-	$(call DO_PATCH,system-cmds,system-cmds,-p1)
 	sed -i '/#include <stdio.h>/a #include <crypt.h>' $(BUILD_WORK)/system-cmds/login.tproj/login.c
 	sed -i -E -e 's|"/usr|"$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)|g' -e 's|"/sbin|"$(MEMO_PREFIX)/sbin|g' \
 		$(BUILD_WORK)/system-cmds/shutdown.tproj/pathnames.h
