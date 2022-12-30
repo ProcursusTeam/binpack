@@ -21,9 +21,9 @@ ksh: ksh-setup
 	install -d $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
 	install -d $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)/bin
 	install -m755 $(BUILD_WORK)/ksh/mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/mksh
-	$(LN_S) mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ksh
-	$(LN_S) ../usr/bin/mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)/bin/ksh
-	$(LN_S) ../usr/bin/mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)/bin/sh
+	$(LN_SR) mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ksh
+	$(LN_SR) $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)/bin/ksh
+	$(LN_SR) $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)/bin/sh
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
 endif

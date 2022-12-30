@@ -40,19 +40,19 @@ apple-cmds: apple-cmds-setup adv-cmds file-cmds kext-tools libarchive network-cm
 	$(STRIP) $(BUILD_WORK)/apple-cmds/binpack
 	install -m755 $(BUILD_WORK)/apple-cmds/binpack $(BUILD_STAGE)/apple-cmds/$(MEMO_PREFIX)/bin/binpack
 	for f in $$(find $(BUILD_STAGE)/apple-cmds/$(MEMO_PREFIX)/bin -type f -name '*.lo' -print); do \
-		$(LN_S) binpack $${f%.lo}; \
+		$(LN_SR) $(BUILD_STAGE)/apple-cmds/$(MEMO_PREFIX)/bin/binpack $${f%.lo}; \
 		rm $$f; \
 	done
 	for f in $$(find $(BUILD_STAGE)/apple-cmds/$(MEMO_PREFIX)/sbin -type f -name '*.lo' -print); do \
-		$(LN_S) ../bin/binpack $${f%.lo}; \
+		$(LN_SR) $(BUILD_STAGE)/apple-cmds/$(MEMO_PREFIX)/bin/binpack $${f%.lo}; \
 		rm $$f; \
 	done
 	for f in $$(find $(BUILD_STAGE)/apple-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin -type f -name '*.lo' -print); do \
-		$(LN_S) ../../bin/binpack $${f%.lo}; \
+		$(LN_SR) $(BUILD_STAGE)/apple-cmds/$(MEMO_PREFIX)/bin/binpack $${f%.lo}; \
 		rm $$f; \
 	done
 	for f in $$(find $(BUILD_STAGE)/apple-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin -type f -name '*.lo' -print); do \
-		$(LN_S) ../../bin/binpack $${f%.lo}; \
+		$(LN_SR) $(BUILD_STAGE)/apple-cmds/$(MEMO_PREFIX)/bin/binpack $${f%.lo}; \
 		rm $$f; \
 	done
 	$(call AFTER_BUILD)
