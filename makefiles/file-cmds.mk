@@ -32,7 +32,7 @@ file-cmds: file-cmds-setup bzip2 xz
 	for tool in du gzip stat; do \
 		EXTRA_CFLAGS=""; \
 		if [ "$$tool" = "gzip" ]; then \
-			EXTRA_CFLAGS='-DGZIP_APPLE_VERSION="321.40.3"'; \
+			EXTRA_CFLAGS='-DGZIP_APPLE_VERSION="321.40.3" -DSMALL'; \
 		fi; \
 		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA_CFLAGS -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool.lo $(BUILD_WORK)/file-cmds/$$tool/$$tool.c -D'__FBSDID(x)=' -D__POSIX_C_SOURCE; \
 	done

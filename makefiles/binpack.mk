@@ -5,7 +5,7 @@ endif
 BINPACK_TARBALL  = binpack
 
 BINPACK_PROJECTS =  apple-cmds
-BINPACK_PROJECTS += bzip2 dropbear ksh ldid less ncurses plutil snaputil trustcache uikittools vim xz zstd
+BINPACK_PROJECTS += dropbear ksh ldid less ncurses plutil snaputil trustcache uikittools vim xz zstd
 ifeq ($(MEMO_TARGET),iphoneos-arm64)
 BINPACK_PROJECTS += launchctl
 endif
