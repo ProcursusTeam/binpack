@@ -19,6 +19,7 @@ xz: xz-setup
 		$(DEFAULT_CONFIGURE_FLAGS) \
 		--disable-shared \
 		--disable-static \
+		--disable-scripts \
 		--disable-nls \
 		--disable-encoders \
 		--disable-threads \
