@@ -5,7 +5,7 @@ endif
 STRAPPROJECTS += xz
 XZ_VERSION    := 5.2.5
 
-xz-setup: setup
+xz-setup: binpack-setup
 	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://tukaani.org/xz/xz-$(XZ_VERSION).tar.xz{$(comma).sig})
 	$(call PGP_VERIFY,xz-$(XZ_VERSION).tar.xz)
 	$(call EXTRACT_TAR,xz-$(XZ_VERSION).tar.xz,xz-$(XZ_VERSION),xz)

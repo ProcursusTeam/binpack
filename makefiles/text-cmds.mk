@@ -20,26 +20,27 @@ text-cmds:
 else
 text-cmds: text-cmds-setup bzip2 xz
 	-cd $(BUILD_WORK)/text-cmds; \
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/bin/cat cat/cat.c; \
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ee ee/ee.c -lncurses -DHAS_NCURSES -DHAS_UNISTD -DHAS_STDARG -DHAS_STDLIB -DHAS_SYS_WAIT; \
-	for bin in cut grep head md5 sed split tail wc; do \
+	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/bin/cat.lo cat/cat.c; \
+	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ee.lo ee/ee.c -lncurses -DHAS_NCURSES -DHAS_UNISTD -DHAS_STDARG -DHAS_STDLIB -DHAS_SYS_WAIT; \
+	for bin in cut grep head sed split tail wc; do \
 		EXTRAFLAGS=""; \
 		if [ "$$bin" = "grep" ]; then \
 			EXTRAFLAGS="-lbz2 -llzma -lz"; \
 		elif [ "$$bin" = "split" ]; then \
 			EXTRAFLAGS="-lutil"; \
 		fi; \
-		$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$bin $$bin/*.c $$EXTRAFLAGS; \
+		$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$bin.lo $$bin/*.c $$EXTRAFLAGS; \
 	done
-	mv $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/md5 $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/sbin/md5
+	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/sbin/md5.lo $(BUILD_WORK)/text-cmds/md5/*.c
 	for cmd in rmd160 sha1 sha256; do \
 		$(LN_S) md5 $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/sbin/$$cmd; \
 	done
 	$(LN_S) grep $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/egrep
 	$(LN_S) grep $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/fgrep
+	$(call SETUP_STUBS)
 	$(call AFTER_BUILD)
-	$(call BINPACK_SIGN,general.xml)
-	$(LDID) -Hsha256 -S$(BUILD_MISC)/entitlements/dd.xml $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/bin/cat
+	#$(call BINPACK_SIGN,general.xml)
+	#$(LDID) -Hsha256 -S$(BUILD_MISC)/entitlements/dd.xml $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/bin/cat
 endif
 
 .PHONY: text-cmds

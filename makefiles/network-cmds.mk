@@ -57,11 +57,12 @@ network-cmds: network-cmds-setup
 	for tproj in {ping,ifconfig}.tproj; do \
 		tproj=$$(basename $$tproj .tproj); \
 		echo $$tproj; \
-		$(CC) -arch $(MEMO_ARCH) $(OPTIMIZATION_FLAGS) $(PLATFORM_VERSION_MIN) -isysroot $(TARGET_SYSROOT) -isystem include -o $$tproj $$tproj.tproj/!(ns).c ecnprobe/gmt2local.c -DPRIVATE=1 -DINET6 -DPLATFORM_$(BARE_PLATFORM) -D__APPLE_USE_RFC_3542=1 -DUSE_RFC2292BIS=1 -D__APPLE_API_OBSOLETE=1 -DTARGET_OS_EMBEDDED=1 -Dether_ntohost=_old_ether_ntohost -D_VA_LIST -D__OS_EXPOSE_INTERNALS__; \
+		$(CC) -arch $(MEMO_ARCH) $(OPTIMIZATION_FLAGS) $(PLATFORM_VERSION_MIN) -isysroot $(TARGET_SYSROOT) -isystem include -r -nostdlib -o $$tproj.lo $$tproj.tproj/!(ns).c ecnprobe/gmt2local.c -DPRIVATE=1 -DINET6 -DPLATFORM_$(BARE_PLATFORM) -D__APPLE_USE_RFC_3542=1 -DUSE_RFC2292BIS=1 -D__APPLE_API_OBSOLETE=1 -DTARGET_OS_EMBEDDED=1 -Dether_ntohost=_old_ether_ntohost -D_VA_LIST -D__OS_EXPOSE_INTERNALS__; \
 	done
-	cp -a $(BUILD_WORK)/network-cmds/{ifconfig,ping} $(BUILD_STAGE)/network-cmds/$(MEMO_PREFIX)/sbin
+	cp -a $(BUILD_WORK)/network-cmds/{ifconfig,ping}.lo $(BUILD_STAGE)/network-cmds/$(MEMO_PREFIX)/sbin
+	$(call SETUP_STUBS)
 	$(call AFTER_BUILD)
-	$(call BINPACK_SIGN,general.xml)
+	#$(call BINPACK_SIGN,general.xml)
 endif
 
 .PHONY: network-cmds

@@ -4,12 +4,12 @@ endif
 
 BINPACK_TARBALL  = binpack
 
-BINPACK_PROJECTS = adv-cmds bzip2 dropbear file-cmds kext-tools ksh ldid less libarchive ncurses network-cmds plconvert plutil shell-cmds snaputil system-cmds trustcache text-cmds uikittools vim xz zstd
+BINPACK_PROJECTS =  apple-cmds
+BINPACK_PROJECTS += bzip2 dropbear ksh ldid less ncurses plutil snaputil trustcache uikittools vim xz zstd
 ifeq ($(MEMO_TARGET),iphoneos-arm64)
 BINPACK_PROJECTS += launchctl
 endif
 ifeq ($(BINPACK_THICK),1)
-BINPACK_PROJECTS += defaults
 BINPACK_TARBALL  = binpack-thick
 endif
 
@@ -51,5 +51,16 @@ BINPACK_SIGN = for file in $$(find $(BUILD_STAGE)/$@ -type f -exec sh -c "file -
 				$(LDID) -Hsha256 -S$(BUILD_MISC)/entitlements/$(1) $$file; \
 			fi; \
 		done; \
+
+SETUP_STUBS = \
+	tmp=$$(mktemp -d); \
+	for file in $$(find $(BUILD_STAGE)/$@ -type f -name '*.lo' -print); do \
+		n=$$(basename $$file .lo); \
+		echo "extern int main(int argc, char **argv, char **envp, char **apple); int _crunched_$${n}_stub(int argc, char **argv, char **envp, char **apple);int _crunched_$${n}_stub(int argc, char **argv, char **envp, char **apple){return main(argc,argv,envp,apple);}" > $${tmp}/$${n}_stub.c; \
+		$(CC) $(CFLAGS) -c $${tmp}/$${n}_stub.c -o $${tmp}/$${n}_stub.o; \
+		$(LD) -Z -r -o $$file $$file $${tmp}/$${n}_stub.o; \
+		nm -U $$file | cut -d" " -f3 | grep -v "^__crunched_$${n}_stub$$" | sed "s/.*/& _\$$$${n}\$$&/" > $${tmp}/$${n}.syms; \
+		llvm-objcopy --redefine-syms $${tmp}/$${n}.syms $$file; \
+	done
 
 .PHONY: binpack

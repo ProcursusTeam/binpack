@@ -37,7 +37,7 @@ system-cmds:
 	@echo "Using previously built system-cmds."
 else
 system-cmds: system-cmds-setup libxcrypt
-	TOOLS="arch dmesg hostinfo login ltop passwd pwd_mkdb reboot shutdown sync sysctl taskpolicy sc_usage fs_usage "; \
+	TOOLS="arch dmesg hostinfo ltop pwd_mkdb reboot shutdown sync sysctl taskpolicy sc_usage fs_usage "; \
 	if [ "$(shell echo $(MEMO_TARGET) | cut -d- -f1)" != "watchos" ]; then \
 		TOOLS+="lsmp"; \
 	fi; \
@@ -46,30 +46,34 @@ system-cmds: system-cmds-setup libxcrypt
 		EXTRA=; \
 		case $${tool} in \
 			arch) EXTRA="-framework CoreFoundation";; \
-			passwd) EXTRA="-lcrypt";; \
 			shutdown) EXTRA="-lbsm -framework IOKit";; \
 			sc_usage) EXTRA="-lncurses";; \
 			pwd_mkdb) EXTRA="-D_PW_NAME_LEN=MAXLOGNAME -D_PW_YPTOKEN=\"__YP!\"";; \
 			fs_usage) EXTRA="$(BUILD_MISC)/PrivateFrameworks/ktrace.framework/ktrace.tbd";; \
 		esac; \
 		echo "$${tool}"; \
-		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA -Iinclude -I$${tool}.tproj $${tool}.tproj/*.c -o $${tool} -DPRIVATE; \
-	done
+		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA -Iinclude -I$${tool}.tproj $${tool}.tproj/*.c -r -nostdlib -o $${tool}.lo -DPRIVATE; \
+	done; \
+	$(CC) $(CFLAGS) $(LDFLAGS) -Iinclude -Ilogin.tproj login.tproj/*.c -o login -DPRIVATE; \
+	$(CC) $(CFLAGS) $(LDFLAGS) -lcrypt -Iinclude -Ipasswd.tproj passwd.tproj/*.c -o passwd -DPRIVATE
 	mkdir -p $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX){/{s,}bin,$(MEMO_SUB_PREFIX)/{s,}bin}
-	[ -e $(BUILD_WORK)/system-cmds/lsmp ] && install -m 755 $(BUILD_WORK)/system-cmds/lsmp $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ || true
-	[ -e $(BUILD_WORK)/system-cmds/sc_usage ] && install -m 755 $(BUILD_WORK)/system-cmds/sc_usage $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ || true
-	[ -e $(BUILD_WORK)/system-cmds/fs_usage ] && install -m 755 $(BUILD_WORK)/system-cmds/fs_usage $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ || true
-	install -m 755 $(BUILD_WORK)/system-cmds/{arch,hostinfo,login,passwd} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/
-	install -m 755 $(BUILD_WORK)/system-cmds/sync $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)/bin/
-	install -m 755 $(BUILD_WORK)/system-cmds/{pwd_mkdb,sysctl,ltop,taskpolicy} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/
-	install -m 755 $(BUILD_WORK)/system-cmds/{dmesg,reboot,shutdown} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)/sbin/
+	[ -e $(BUILD_WORK)/system-cmds/lsmp.lo ] && install $(BUILD_WORK)/system-cmds/lsmp.lo $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ || true
+	[ -e $(BUILD_WORK)/system-cmds/sc_usage.lo ] && install $(BUILD_WORK)/system-cmds/sc_usage.lo $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ || true
+	[ -e $(BUILD_WORK)/system-cmds/fs_usage.lo ] && install $(BUILD_WORK)/system-cmds/fs_usage.lo $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ || true
+	install $(BUILD_WORK)/system-cmds/{arch,hostinfo}.lo $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/
+	install -m 755 $(BUILD_WORK)/system-cmds/{login,passwd} $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/
+	install $(BUILD_WORK)/system-cmds/sync.lo $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)/bin/
+	install $(BUILD_WORK)/system-cmds/{pwd_mkdb,sysctl,ltop,taskpolicy}.lo $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/
+	install $(BUILD_WORK)/system-cmds/{dmesg,reboot,shutdown}.lo $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)/sbin/
+	$(call SETUP_STUBS)
 	$(call AFTER_BUILD)
-	$(call BINPACK_SIGN,general.xml)
-	-$(LDID) -S$(BUILD_MISC)/entitlements/lsmp.xml $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/lsmp
-	-$(LDID) -S$(BUILD_MISC)/entitlements/fs_usage.plist $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/fs_usage
+	#$(call BINPACK_SIGN,general.xml)
+	#-$(LDID) -S$(BUILD_MISC)/entitlements/lsmp.xml $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/lsmp
+	#-$(LDID) -S$(BUILD_MISC)/entitlements/fs_usage.plist $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/fs_usage
 	-$(LDID) -S$(BUILD_MISC)/entitlements/passwd.plist $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/passwd
-	$(LDID) -S$(BUILD_MISC)/entitlements/taskpolicy.xml $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/taskpolicy
-	find $(BUILD_STAGE)/system-cmds -name '.ldid*' -type f -delete
+	-$(LDID) -S$(BUILD_MISC)/entitlements/general.xml $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/login
+	#$(LDID) -S$(BUILD_MISC)/entitlements/taskpolicy.xml $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/taskpolicy
+	#find $(BUILD_STAGE)/system-cmds -name '.ldid*' -type f -delete
 	chmod u+s $(BUILD_STAGE)/system-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/{login,passwd}
 endif
 

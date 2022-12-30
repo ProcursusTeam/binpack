@@ -21,10 +21,12 @@ libarchive: libarchive-setup
 		bsdtar.c cmdline.c creation_set.c read.c subst.c util.c write.c \
 		../libarchive_fe/err.c ../libarchive_fe/line_reader.c ../libarchive_fe/passphrase.c \
 		$(LDFLAGS) -larchive \
-		-o $(BUILD_STAGE)/libarchive/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/tar
+		-r -nostdlib \
+		-o $(BUILD_STAGE)/libarchive/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/tar.lo
 	$(LN_S) tar $(BUILD_STAGE)/libarchive/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/bsdtar
+	$(call SETUP_STUBS)
 	$(call AFTER_BUILD)
-	$(call BINPACK_SIGN,general.xml)
+	#$(call BINPACK_SIGN,general.xml)
 endif
 
 .PHONY: libarchive

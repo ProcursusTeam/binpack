@@ -19,32 +19,29 @@ file-cmds:
 	@echo "Using previously built file-cmds."
 else
 file-cmds: file-cmds-setup bzip2 xz
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/sbin/mknod $(BUILD_WORK)/file-cmds/mknod/{mknod,pack_dev}.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/chflags $(BUILD_WORK)/file-cmds/chflags/chflags.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/chown $(BUILD_WORK)/file-cmds/chown/chown.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/sbin/mknod.lo $(BUILD_WORK)/file-cmds/mknod/{mknod,pack_dev}.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/chflags.lo $(BUILD_WORK)/file-cmds/chflags/chflags.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/chown.lo $(BUILD_WORK)/file-cmds/chown/chown.c
 	for tool in chmod cp dd ln ls mkdir mv rm rmdir; do \
 		EXTRA_CFLAGS=""; \
-		if [ "$$tool" = "dd" ]; then \
-			EXTRA_CFLAGS="-lutil"; \
-		elif [ "$$tool" = "ls" ]; then \
-			EXTRA_CFLAGS="-DCOLORLS -lutil -lncurses"; \
+		if [ "$$tool" = "ls" ]; then \
+			EXTRA_CFLAGS="-DCOLORLS"; \
 		fi; \
-		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA_CFLAGS -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/bin/$$tool $(BUILD_WORK)/file-cmds/$$tool/*.c -D'__FBSDID(x)=' -D__POSIX_C_SOURCE; \
+		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA_CFLAGS -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/bin/$$tool.lo $(BUILD_WORK)/file-cmds/$$tool/*.c -D'__FBSDID(x)=' -D__POSIX_C_SOURCE; \
 	done
 	for tool in du gzip stat; do \
 		EXTRA_CFLAGS=""; \
-		if [ "$$tool" = "du" ]; then \
-			EXTRA_CFLAGS="-lutil"; \
-		elif [ "$$tool" = "gzip" ]; then \
-			EXTRA_CFLAGS='-DGZIP_APPLE_VERSION="321.40.3" -llzma -lz -lbz2'; \
+		if [ "$$tool" = "gzip" ]; then \
+			EXTRA_CFLAGS='-DGZIP_APPLE_VERSION="321.40.3"'; \
 		fi; \
-		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA_CFLAGS -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool $(BUILD_WORK)/file-cmds/$$tool/$$tool.c -D'__FBSDID(x)=' -D__POSIX_C_SOURCE; \
+		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA_CFLAGS -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool.lo $(BUILD_WORK)/file-cmds/$$tool/$$tool.c -D'__FBSDID(x)=' -D__POSIX_C_SOURCE; \
 	done
 	$(LN_S) gzip $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/gunzip
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/xattr $(BUILD_WORK)/file-cmds/xattr/xattr.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/xattr.lo $(BUILD_WORK)/file-cmds/xattr/xattr.c
+	$(call SETUP_STUBS)
 	$(call AFTER_BUILD)
-	$(call BINPACK_SIGN,general.xml)
-	$(LDID) -Hsha256 -S$(BUILD_MISC)/entitlements/dd.xml $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/bin/dd
+	#$(call BINPACK_SIGN,general.xml)
+	#$(LDID) -Hsha256 -S$(BUILD_MISC)/entitlements/dd.xml $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/bin/dd
 endif
 
 .PHONY: file-cmds
