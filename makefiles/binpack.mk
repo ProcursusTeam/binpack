@@ -13,6 +13,8 @@ ifeq ($(BINPACK_THICK),1)
 BINPACK_TARBALL  = binpack-thick
 endif
 
+BINPACK := 1
+
 binpack-setup: setup
 	@cp -af $(MACOSX_SYSROOT)/usr/include/{curses,ncurses{,_dll},unctrl,termcap,term}.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/
 	@cp -af $(MACOSX_SYSROOT)/usr/include/get_compat.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/
@@ -22,7 +24,7 @@ binpack-setup: setup
 	$(call DOWNLOAD_FILES,$(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include,https://raw.githubusercontent.com/apple-oss-distributions/Libinfo/main/membership.subproj/membershipPriv.h)
 
 binpack: 
-	+MEMO_NO_IOSEXEC=1 $(MAKE) binpack-setup $(BINPACK_PROJECTS)
+	+MEMO_NO_IOSEXEC=1 BINPACK=1 $(MAKE) binpack-setup $(BINPACK_PROJECTS)
 	rm -rf $(BUILD_STRAP)/binpack
 	mkdir -p $(BUILD_STRAP)/binpack
 ifneq ($(BINPACK_THICK),1)
