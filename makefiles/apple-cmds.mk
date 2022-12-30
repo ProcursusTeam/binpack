@@ -37,6 +37,7 @@ apple-cmds: apple-cmds-setup adv-cmds file-cmds kext-tools libarchive network-cm
 	done; \
 	$(CC) $(CFLAGS) -c -o $(BUILD_WORK)/apple-cmds/binpack.o $(BUILD_WORK)/apple-cmds/binpack.c -DEXECNAME=\"binpack\"; \
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILD_WORK)/apple-cmds/binpack $(BUILD_WORK)/apple-cmds/binpack.o $$objs -larchive -lutil -lncurses -lbsm -lbz2 -llzma -lz -framework IOKit -framework CoreFoundation $(BUILD_MISC)/PrivateFrameworks/ktrace.framework/ktrace.tbd
+	$(STRIP) $(BUILD_WORK)/apple-cmds/binpack
 	install -m755 $(BUILD_WORK)/apple-cmds/binpack $(BUILD_STAGE)/apple-cmds/$(MEMO_PREFIX)/bin/binpack
 	for f in $$(find $(BUILD_STAGE)/apple-cmds/$(MEMO_PREFIX)/bin -type f -name '*.lo' -print); do \
 		$(LN_S) binpack $${f%.lo}; \
