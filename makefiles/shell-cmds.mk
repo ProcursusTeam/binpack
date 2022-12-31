@@ -19,12 +19,12 @@ else
 shell-cmds: shell-cmds-setup
 	-cd $(BUILD_WORK)/shell-cmds; \
 	for bin in date echo hostname kill sleep pwd; do \
-		$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)/bin/$$bin.lo $$bin/*.c -D'__FBSDID(x)='; \
+		$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)/bin/$$bin.lo $$bin/*.c -D'__FBSDID(x)='; \
 	done; \
-	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/id.lo id/id.c -D'__FBSDID(x)='; \
+	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/id.lo id/id.c -D'__FBSDID(x)='; \
 	yacc -o $(BUILD_WORK)/shell-cmds/find/getdate.c $(BUILD_WORK)/shell-cmds/find/getdate.y; \
 	for bin in env false find hexdump killall nohup printf realpath renice script seq tee time true uname w what which xargs; do \
-		$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$bin.lo $$bin/*.c -D'__FBSDID(x)=' -DHAVE_UTMPX; \
+		$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$bin.lo $$bin/*.c -D'__FBSDID(x)=' -DHAVE_UTMPX; \
 	done
 	$(call SETUP_STUBS)
 	$(call AFTER_BUILD)

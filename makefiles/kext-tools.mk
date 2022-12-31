@@ -23,7 +23,7 @@ kext-tools: kext-tools-setup
 	cd $(BUILD_WORK)/kext-tools && \
 	$(CC) $(CFLAGS) -c kext_tools_util.c KernelManagementShims/Shims.m -DPRIVATE -D__OS_EXPOSE_INTERNALS__ -DEMBEDDED_HOST && echo kext_tools_util.o; \
 	$(CC) $(CFLAGS) -c KernelManagementShims/Shims.m -DPRIVATE -D__OS_EXPOSE_INTERNALS__ -DEMBEDDED_HOST && echo Shims.o; \
-	$(CC) $(CFLAGS) $(LDFLAGS) $(KEXT_TOOLS_CFLAGS) kextstat_main.c -r -nostdlib -o $(BUILD_STAGE)/kext-tools/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/kextstat.lo && echo kextstat
+	$(CC) $(CFLAGS) $(KEXT_TOOLS_CFLAGS) kextstat_main.c -r -nostdlib -o $(BUILD_STAGE)/kext-tools/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/kextstat.lo && echo kextstat
 	$(call SETUP_STUBS)
 	$(call AFTER_BUILD)
 	#$(LDID) -S$(BUILD_MISC)/entitlements/kextstat.plist $(BUILD_STAGE)/kext-tools/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/kextstat

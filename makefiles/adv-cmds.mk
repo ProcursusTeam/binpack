@@ -18,7 +18,7 @@ adv-cmds:
 else
 adv-cmds: adv-cmds-setup
 	mkdir -p $(BUILD_STAGE)/adv-cmds/$(MEMO_PREFIX)/bin
-	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/adv-cmds/$(MEMO_PREFIX)/bin/stty.lo $(BUILD_WORK)/adv-cmds/stty/*.c
+	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/adv-cmds/$(MEMO_PREFIX)/bin/stty.lo $(BUILD_WORK)/adv-cmds/stty/*.c
 	$(call SETUP_STUBS)
 	$(call AFTER_BUILD)
 endif

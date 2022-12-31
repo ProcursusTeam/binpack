@@ -51,7 +51,7 @@ system-cmds: system-cmds-setup libxcrypt
 			fs_usage) EXTRA="$(BUILD_MISC)/PrivateFrameworks/ktrace.framework/ktrace.tbd";; \
 		esac; \
 		echo "$${tool}"; \
-		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA -Iinclude -I$${tool}.tproj $${tool}.tproj/*.c -r -nostdlib -o $${tool}.lo -DPRIVATE; \
+		$(CC) $(CFLAGS) $$EXTRA -Iinclude -I$${tool}.tproj $${tool}.tproj/*.c -r -nostdlib -o $${tool}.lo -DPRIVATE; \
 	done; \
 	$(CC) $(CFLAGS) $(LDFLAGS) -Iinclude -Ilogin.tproj login.tproj/*.c -o login -DPRIVATE; \
 	$(CC) $(CFLAGS) $(LDFLAGS) -lcrypt -Iinclude -Ipasswd.tproj passwd.tproj/*.c -o passwd -DPRIVATE

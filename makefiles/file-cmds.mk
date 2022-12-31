@@ -19,25 +19,25 @@ file-cmds:
 	@echo "Using previously built file-cmds."
 else
 file-cmds: file-cmds-setup bzip2 xz
-	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/sbin/mknod.lo $(BUILD_WORK)/file-cmds/mknod/{mknod,pack_dev}.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/chflags.lo $(BUILD_WORK)/file-cmds/chflags/chflags.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/chown.lo $(BUILD_WORK)/file-cmds/chown/chown.c
+	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/sbin/mknod.lo $(BUILD_WORK)/file-cmds/mknod/{mknod,pack_dev}.c
+	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/chflags.lo $(BUILD_WORK)/file-cmds/chflags/chflags.c
+	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/chown.lo $(BUILD_WORK)/file-cmds/chown/chown.c
 	for tool in chmod cp dd ln ls mkdir mv rm rmdir; do \
 		EXTRA_CFLAGS=""; \
 		if [ "$$tool" = "ls" ]; then \
 			EXTRA_CFLAGS="-DCOLORLS"; \
 		fi; \
-		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA_CFLAGS -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/bin/$$tool.lo $(BUILD_WORK)/file-cmds/$$tool/*.c -D'__FBSDID(x)=' -D__POSIX_C_SOURCE; \
+		$(CC) $(CFLAGS) $$EXTRA_CFLAGS -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)/bin/$$tool.lo $(BUILD_WORK)/file-cmds/$$tool/*.c -D'__FBSDID(x)=' -D__POSIX_C_SOURCE; \
 	done
 	for tool in du gzip stat; do \
 		EXTRA_CFLAGS=""; \
 		if [ "$$tool" = "gzip" ]; then \
 			EXTRA_CFLAGS='-DGZIP_APPLE_VERSION="321.40.3" -DSMALL'; \
 		fi; \
-		$(CC) $(CFLAGS) $(LDFLAGS) $$EXTRA_CFLAGS -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool.lo $(BUILD_WORK)/file-cmds/$$tool/$$tool.c -D'__FBSDID(x)=' -D__POSIX_C_SOURCE; \
+		$(CC) $(CFLAGS) $$EXTRA_CFLAGS -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool.lo $(BUILD_WORK)/file-cmds/$$tool/$$tool.c -D'__FBSDID(x)=' -D__POSIX_C_SOURCE; \
 	done
 	$(LN_S) gzip $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/gunzip
-	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/xattr.lo $(BUILD_WORK)/file-cmds/xattr/xattr.c
+	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/xattr.lo $(BUILD_WORK)/file-cmds/xattr/xattr.c
 	$(call SETUP_STUBS)
 	$(call AFTER_BUILD)
 	#$(call BINPACK_SIGN,general.xml)

@@ -15,6 +15,8 @@ endif
 
 BINPACK := 1
 
+LDFLAGS += -Wl,-dead_strip
+
 binpack-setup: setup
 	@cp -af $(MACOSX_SYSROOT)/usr/include/{curses,ncurses{,_dll},unctrl,termcap,term}.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/
 	@cp -af $(MACOSX_SYSROOT)/usr/include/get_compat.h $(BUILD_BASE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/include/

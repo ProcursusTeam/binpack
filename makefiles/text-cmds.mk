@@ -20,8 +20,8 @@ text-cmds:
 else
 text-cmds: text-cmds-setup bzip2 xz
 	-cd $(BUILD_WORK)/text-cmds; \
-	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/bin/cat.lo cat/cat.c; \
-	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ee.lo ee/ee.c -lncurses -DHAS_NCURSES -DHAS_UNISTD -DHAS_STDARG -DHAS_STDLIB -DHAS_SYS_WAIT; \
+	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/bin/cat.lo cat/cat.c; \
+	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ee.lo ee/ee.c -lncurses -DHAS_NCURSES -DHAS_UNISTD -DHAS_STDARG -DHAS_STDLIB -DHAS_SYS_WAIT; \
 	for bin in cut grep head sed split tail wc; do \
 		EXTRAFLAGS=""; \
 		if [ "$$bin" = "grep" ]; then \
@@ -29,9 +29,9 @@ text-cmds: text-cmds-setup bzip2 xz
 		elif [ "$$bin" = "split" ]; then \
 			EXTRAFLAGS="-lutil"; \
 		fi; \
-		$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$bin.lo $$bin/*.c $$EXTRAFLAGS; \
+		$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$bin.lo $$bin/*.c $$EXTRAFLAGS; \
 	done
-	$(CC) $(CFLAGS) $(LDFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/sbin/md5.lo $(BUILD_WORK)/text-cmds/md5/*.c
+	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/sbin/md5.lo $(BUILD_WORK)/text-cmds/md5/*.c
 	for cmd in rmd160 sha1 sha256; do \
 		$(LN_S) md5 $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/sbin/$$cmd; \
 	done

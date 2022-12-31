@@ -15,7 +15,7 @@ plconvert:
 	@echo "Using previously built plconvert."
 else
 plconvert: plconvert-setup
-	$(CC) $(CFLAGS) $(LDFLAGS) $(BUILD_WORK)/plconvert/plconvert.c -r -nostdlib -o $(BUILD_STAGE)/plconvert/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/plconvert.lo -framework CoreFoundation
+	$(CC) $(CFLAGS) $(BUILD_WORK)/plconvert/plconvert.c -r -nostdlib -o $(BUILD_STAGE)/plconvert/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/plconvert.lo -framework CoreFoundation
 	$(call SETUP_STUBS)
 	$(call AFTER_BUILD)
 	#$(call BINPACK_SIGN,general.xml)
