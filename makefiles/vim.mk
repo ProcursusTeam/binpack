@@ -25,7 +25,7 @@ vim: vim-setup
 		--without-x \
 		--with-tlib=ncurses \
 		--disable-darwin \
-		--with-features=small \
+		--with-features=tiny \
 		--disable-xsmp \
 		--disable-xsmp-interact \
 		--disable-netbeans \
