@@ -29,11 +29,8 @@ binpack:
 	+MEMO_NO_IOSEXEC=1 BINPACK=1 $(MAKE) binpack-setup $(BINPACK_PROJECTS)
 	rm -rf $(BUILD_STRAP)/binpack
 	mkdir -p $(BUILD_STRAP)/binpack
-ifneq ($(BINPACK_THICK),1)
-	rm -f $(BUILD_STRAP)/binpack.tar
-else
-	rm -f $(BUILD_STRAP)/binpack-thick.tar
-endif
+	rm -f $(BUILD_STRAP)/$(BINPACK_TARBALL).tar
+	rm -f $(BUILD_STRAP)/$(BINPACK_TARBALL).dmg
 	rm -f $(BUILD_STRAP)/.fakeroot_binpack
 	touch $(BUILD_STRAP)/.fakeroot_binpack
 	for proj in $(BINPACK_PROJECTS); do \
@@ -42,6 +39,7 @@ endif
 	rm -rf $(BUILD_STRAP)/binpack/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/{include,lib,share/{aclocal,doc,man}}
 	cd $(BUILD_STRAP)/binpack; mtree -c | sed -E -e '/passwd|login/ s/$$/ mode=4755/' -e 's/uid=[0-9]* /uid=0 /' -e 's/gid=[0-9]* /gid=0 /' > $(BUILD_STRAP)/$(BINPACK_TARBALL).mtree
 	cd $(BUILD_STRAP)/binpack; bsdtar -cf $(BUILD_STRAP)/$(BINPACK_TARBALL).tar @$(BUILD_STRAP)/$(BINPACK_TARBALL).mtree
+	hdiutil create -layout NONE -format UDZO -imagekey zlib-level=9 -volname binpack -srcfolder $(BUILD_STRAP)/binpack -fs HFS+ $(BUILD_STRAP)/$(BINPACK_TARBALL).dmg
 	-tc create $(BUILD_STRAP)/$(BINPACK_TARBALL).tc; \
 	for file in $$(find $(BUILD_STRAP)/binpack -type f -exec sh -c "file -ib '{}' | grep -q 'x-mach-binary; charset=binary'" \; -print); do \
 		tc append $(BUILD_STRAP)/$(BINPACK_TARBALL).tc $$file; \
