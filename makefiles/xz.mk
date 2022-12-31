@@ -19,6 +19,8 @@ xz: xz-setup
 		$(DEFAULT_CONFIGURE_FLAGS) \
 		--disable-shared \
 		--disable-static \
+		--disable-xz \
+		--disable-xzdec \
 		--disable-scripts \
 		--disable-nls \
 		--disable-encoders \
@@ -29,9 +31,6 @@ xz: xz-setup
 		--disable-lzma-links
 	+$(MAKE) -C $(BUILD_WORK)/xz install \
 		DESTDIR=$(BUILD_STAGE)/xz
-	$(LN_S) xz $(BUILD_STAGE)/xz/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/lzma
-	$(LN_S) xz $(BUILD_STAGE)/xz/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/lzcat
-	$(LN_S) xz $(BUILD_STAGE)/xz/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/unlzma
 	$(call AFTER_BUILD,copy)
 	$(call BINPACK_SIGN,general.xml)
 endif

@@ -11,7 +11,8 @@ file-cmds-setup: setup binpack-setup
 	$(call GITHUB_ARCHIVE,apple-oss-distributions,file_cmds,$(FILE-CMDS_VERSION),file_cmds-$(FILE-CMDS_VERSION))
 	$(call EXTRACT_TAR,file_cmds-$(FILE-CMDS_VERSION).tar.gz,file_cmds-file_cmds-$(FILE-CMDS_VERSION),file-cmds)
 	sed -i '/libutil.h/ s/$$/\nint expand_number(const char *buf, uint64_t *num);/' $(BUILD_WORK)/file-cmds/du/du.c
-	rm $(BUILD_WORK)/file-cmds/dd/gen.c
+	sed -i 's/strcmp(progname, "gunzip") == 0/& || strcmp(progname, "xzdec") == 0 || strcmp(progname, "bunzip2") == 0/' $(BUILD_WORK)/file-cmds/gzip/gzip.c
+	rm -f $(BUILD_WORK)/file-cmds/dd/gen.c
 	mkdir -p $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX){,$(MEMO_SUB_PREFIX)}/{,s}bin
 
 ifneq ($(wildcard $(BUILD_WORK)/file-cmds/.build_complete),)
@@ -32,11 +33,13 @@ file-cmds: file-cmds-setup bzip2 xz
 	for tool in du gzip stat; do \
 		EXTRA_CFLAGS=""; \
 		if [ "$$tool" = "gzip" ]; then \
-			EXTRA_CFLAGS='-DGZIP_APPLE_VERSION="321.40.3" -DSMALL'; \
+			EXTRA_CFLAGS='-DGZIP_APPLE_VERSION="321.40.3"'; \
 		fi; \
 		$(CC) $(CFLAGS) $$EXTRA_CFLAGS -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool.lo $(BUILD_WORK)/file-cmds/$$tool/$$tool.c -D'__FBSDID(x)=' -D__POSIX_C_SOURCE; \
 	done
 	$(LN_S) gzip $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/gunzip
+	$(LN_S) gzip $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/xzdec
+	$(LN_S) gzip $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/bunzip2
 	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/file-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/xattr.lo $(BUILD_WORK)/file-cmds/xattr/xattr.c
 	$(call SETUP_STUBS)
 	$(call AFTER_BUILD)
