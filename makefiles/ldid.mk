@@ -14,7 +14,7 @@ ifneq ($(wildcard $(BUILD_WORK)/ldid/.build_complete),)
 ldid:
 	@echo "Using previously built ldid."
 else
-ldid: ldid-setup openssl libplist
+ldid: ldid-setup libplist libressl
 	+$(MAKE) -C $(BUILD_WORK)/ldid install \
 		PREFIX="$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)" \
 		VERSION="$(LDID_VERSION)" \
