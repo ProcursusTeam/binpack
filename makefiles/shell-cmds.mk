@@ -18,12 +18,13 @@ shell-cmds:
 else
 shell-cmds: shell-cmds-setup
 	-cd $(BUILD_WORK)/shell-cmds; \
-	for bin in date echo hostname kill sleep pwd; do \
+	for bin in date hostname; do \
 		$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)/bin/$$bin.lo $$bin/*.c -D'__FBSDID(x)='; \
 	done; \
 	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/id.lo id/id.c -D'__FBSDID(x)='; \
+	$(LN_S) id $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/whoami; \
 	yacc -o $(BUILD_WORK)/shell-cmds/find/getdate.c $(BUILD_WORK)/shell-cmds/find/getdate.y; \
-	for bin in env false find hexdump killall nohup printf realpath renice script seq tee time true uname w what which xargs; do \
+	for bin in env find hexdump killall nohup printf realpath renice script seq tee time uname w what which xargs; do \
 		$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/shell-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$bin.lo $$bin/*.c -D'__FBSDID(x)=' -DHAVE_UTMPX; \
 	done
 	$(call SETUP_STUBS)

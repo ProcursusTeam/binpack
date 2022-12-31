@@ -21,8 +21,14 @@ ksh: ksh-setup
 	install -d $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
 	install -d $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)/bin
 	install -m755 $(BUILD_WORK)/ksh/mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/mksh
-	$(LN_SR) mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ksh
+	for builtin in [ test echo kill sleep pwd; do \
+		$(LN_SR) $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)/bin/$${builtin}; \
+	done
+	for builtin in false true; do \
+		$(LN_SR) $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$${builtin}; \
+	done
 	$(LN_SR) $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)/bin/ksh
+	$(LN_SR) $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)/bin/sh
 	$(LN_SR) $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/mksh $(BUILD_STAGE)/ksh/$(MEMO_PREFIX)/bin/sh
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
