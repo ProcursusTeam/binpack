@@ -22,7 +22,7 @@ less: less-setup
 	+$(MAKE) -C $(BUILD_WORK)/less install \
 		DESTDIR="$(BUILD_STAGE)/less"
 	$(LN_S) less $(BUILD_STAGE)/less/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/more
-	rm -f $(BUILD_STAGE)/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/less{key,echo}
+	rm -f $(BUILD_STAGE)/less/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/less{key,echo}
 	$(call AFTER_BUILD)
 	$(call BINPACK_SIGN,general.xml)
 endif
