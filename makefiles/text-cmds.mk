@@ -21,6 +21,7 @@ else
 text-cmds: text-cmds-setup bzip2 xz
 	-cd $(BUILD_WORK)/text-cmds; \
 	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/bin/cat.lo cat/cat.c; \
+	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)/bin/ed.lo ed/*.c; \
 	$(CC) $(CFLAGS) -r -nostdlib -o $(BUILD_STAGE)/text-cmds/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ee.lo ee/ee.c -lncurses -DHAS_NCURSES -DHAS_UNISTD -DHAS_STDARG -DHAS_STDLIB -DHAS_SYS_WAIT; \
 	for bin in cut grep head sed split tail wc; do \
 		EXTRAFLAGS=""; \
