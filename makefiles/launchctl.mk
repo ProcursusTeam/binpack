@@ -5,7 +5,7 @@ endif
 ifeq (,$(findstring darwin,$(MEMO_TARGET)))
 
 STRAPPROJECTS     += launchctl
-LAUNCHCTL_VERSION := 1.0.1
+LAUNCHCTL_VERSION := 1.1.1
 
 launchctl-setup: binpack-setup
 	$(call GITHUB_ARCHIVE,ProcursusTeam,launchctl,$(LAUNCHCTL_VERSION),v$(LAUNCHCTL_VERSION))
