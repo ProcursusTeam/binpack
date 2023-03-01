@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 STRAPPROJECTS += xz
-XZ_VERSION    := 5.2.5
+XZ_VERSION    := 5.4.1
 
 xz-setup: binpack-setup
 	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://tukaani.org/xz/xz-$(XZ_VERSION).tar.xz{$(comma).sig})
