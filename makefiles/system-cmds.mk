@@ -15,11 +15,7 @@ endif
 
 system-cmds-setup: setup libxcrypt
 	$(call GITHUB_ARCHIVE,apple-oss-distributions,system_cmds,$(SYSTEM-CMDS_VERSION),system_cmds-$(SYSTEM-CMDS_VERSION))
-ifeq ($(shell [ "$(CFVER_WHOLE)" -lt 1700 ] && echo 1),1)
-	$(call EXTRACT_TAR,system_cmds-$(SYSTEM-CMDS_VERSION).tar.gz,system_cmds-$(SYSTEM-CMDS_VERSION),system-cmds)
-else
 	$(call EXTRACT_TAR,system_cmds-$(SYSTEM-CMDS_VERSION).tar.gz,system_cmds-system_cmds-$(SYSTEM-CMDS_VERSION),system-cmds)
-endif
 ifeq ($(shell [ "$(CFVER_WHOLE)" -lt 1800 ] && echo 1),1)
 	$(call DO_PATCH,system-cmds,system-cmds,-p1)
 else
