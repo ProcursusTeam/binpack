@@ -5,10 +5,7 @@ endif
 BINPACK_TARBALL  = binpack
 
 BINPACK_PROJECTS =  apple-cmds
-BINPACK_PROJECTS += curl dropbear ksh ldid less ncurses plutil snaputil trustcache uikittools vim xz zstd
-ifeq ($(MEMO_TARGET),iphoneos-arm64)
-BINPACK_PROJECTS += launchctl
-endif
+BINPACK_PROJECTS += curl dropbear ksh launchctl ldid less ncurses plutil snaputil trustcache uikittools vim xz zstd
 ifeq ($(BINPACK_THICK),1)
 BINPACK_TARBALL  = binpack-thick
 endif
@@ -40,9 +37,9 @@ binpack:
 	cd $(BUILD_STRAP)/binpack; mtree -c | sed -E -e '/passwd|login/ s/$$/ mode=4755/' -e 's/uid=[0-9]* /uid=0 /' -e 's/gid=[0-9]* /gid=0 /' > $(BUILD_STRAP)/$(BINPACK_TARBALL).mtree
 	cd $(BUILD_STRAP)/binpack; bsdtar -cf $(BUILD_STRAP)/$(BINPACK_TARBALL).tar @$(BUILD_STRAP)/$(BINPACK_TARBALL).mtree
 	hdiutil create -layout NONE -format UDZO -imagekey zlib-level=9 -volname binpack -srcfolder $(BUILD_STRAP)/binpack -fs HFS+ $(BUILD_STRAP)/$(BINPACK_TARBALL).dmg
-	-tc create $(BUILD_STRAP)/$(BINPACK_TARBALL).tc; \
+	-trustcache create $(BUILD_STRAP)/$(BINPACK_TARBALL).tc; \
 	for file in $$(find $(BUILD_STRAP)/binpack -type f -exec sh -c "file -ib '{}' | grep -q 'x-mach-binary; charset=binary'" \; -print); do \
-		tc append $(BUILD_STRAP)/$(BINPACK_TARBALL).tc $$file; \
+		trustcache append $(BUILD_STRAP)/$(BINPACK_TARBALL).tc $$file; \
 	done
 	rm -rf $(BUILD_STRAP)/binpack
 	
