@@ -22,10 +22,10 @@ ncurses: ncurses-setup
 	sh progs/MKtermsort.sh awk include/Caps > progs/termsort.c; \
 	echo -e '#define PROG_CAPTOINFO "captoinfo"\n#define PROG_INFOTOCAP "infotocap"\n#define PROG_RESET "reset"\n#define PROG_INIT "init"\n' > progs/transform.h; \
 	for tool in toe tput tset; do \
-		$(CC) $(CFLAGS) $(LDFLAGS) -D_XOPEN_SOURCE_EXTENDED -Iinclude -Iprogs -lncurses progs/$${tool}.c -o $(BUILD_STAGE)/ncurses/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
+		$(CC) $(CFLAGS) $(LDFLAGS) -Wno-error-implicit-function-declaration -D_XOPEN_SOURCE_EXTENDED -Iinclude -Iprogs -lncurses progs/$${tool}.c -o $(BUILD_STAGE)/ncurses/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
 	done; \
 	for tool in clear infocmp tic; do \
-		$(CC) $(CFLAGS) $(LDFLAGS) -D_XOPEN_SOURCE_EXTENDED -Iinclude -Iprogs -lncurses progs/dump_entry.c progs/$${tool}.c -o $(BUILD_STAGE)/ncurses/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
+		$(CC) $(CFLAGS) $(LDFLAGS) -Wno-error-implicit-function-declaration -D_XOPEN_SOURCE_EXTENDED -Iinclude -Iprogs -lncurses progs/dump_entry.c progs/$${tool}.c -o $(BUILD_STAGE)/ncurses/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/$$tool; \
 	done
 	$(LN_S) tset $(BUILD_STAGE)/ncurses/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/reset
 	$(LN_S) tic $(BUILD_STAGE)/ncurses/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/captoinfo
