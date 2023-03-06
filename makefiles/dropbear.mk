@@ -3,10 +3,10 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS      += dropbear
-DROPBEAR_VERSION := 2020.81
+DROPBEAR_VERSION := 2022.83
 
 dropbear-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://github.com/mkj/dropbear/archive/DROPBEAR_2020.81.tar.gz)
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://github.com/mkj/dropbear/archive/DROPBEAR_$(DROPBEAR_VERSION).tar.gz)
 	$(call EXTRACT_TAR,DROPBEAR_$(DROPBEAR_VERSION).tar.gz,dropbear-DROPBEAR_$(DROPBEAR_VERSION),dropbear)
 	$(call DO_PATCH,dropbear,dropbear,-p1)
 	[ ! -e $(BUILD_WORK)/dropbear/dropbear-overrides.patch.done ] && patch -p1 -d $(BUILD_WORK)/dropbear < $(BUILD_ROOT)/patches/dropbear-overrides.patch && touch $(BUILD_WORK)/dropbear/dropbear-overrides.patch.done
