@@ -4,7 +4,7 @@ endif
 
 SUBPROJECTS += vim
 # Per homebrew, vim should only be updated every 50 releases on multiples of 50
-VIM_VERSION := 8.2.1800
+VIM_VERSION := 9.0.1350
 
 vim-setup: setup binpack-setup
 	$(call GITHUB_ARCHIVE,vim,vim,$(VIM_VERSION),v$(VIM_VERSION))
