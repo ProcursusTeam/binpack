@@ -5,7 +5,7 @@ endif
 ifeq (,$(findstring darwin,$(MEMO_TARGET)))
 
 STRAPPROJECTS     += libxcrypt
-LIBXCRYPT_VERSION := 4.4.27
+LIBXCRYPT_VERSION := 4.4.33
 
 libxcrypt-setup: setup
 	$(call GITHUB_ARCHIVE,besser82,libxcrypt,$(LIBXCRYPT_VERSION),v$(LIBXCRYPT_VERSION))
