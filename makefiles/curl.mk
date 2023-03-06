@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS  += curl
-CURL_VERSION := 136.60.4
+CURL_VERSION := 136.80.2
 
 curl-setup: setup
 	$(call GITHUB_ARCHIVE,apple-oss-distributions,curl,$(CURL_VERSION),curl-$(CURL_VERSION))
