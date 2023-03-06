@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS       += libressl
-LIBRESSL_VERSION  := 3.6.1
+LIBRESSL_VERSION  := 3.7.0
 
 libressl-setup: setup
 	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-$(LIBRESSL_VERSION).tar.gz{$(comma).asc})
