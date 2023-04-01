@@ -39,6 +39,8 @@ dropbear: dropbear-setup
 	$(LN_S) dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/dropbearconvert
 	$(LN_S) dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/dropbearkey
 	$(LN_S) dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/scp
+	# ssh is just an alias for dbclient
+	$(LN_S) dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ssh
 	$(LN_S) ../bin/dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/dropbear
 	mkdir -p $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/
 	cp $(BUILD_ROOT)/dropbear.plist $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/dropbear.plist.example
