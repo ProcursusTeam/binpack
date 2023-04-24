@@ -1,0 +1,112 @@
+diff --git a/mv/mv.c b/mv/mv.c
+index 9ac71cd..18aef84 100644
+--- a/mv/mv.c
++++ b/mv/mv.c
+@@ -68,6 +68,7 @@ __FBSDID("$FreeBSD$");
+ #include <string.h>
+ #include <sysexits.h>
+ #include <unistd.h>
++#include <libgen.h>
+ #include <locale.h>
+ 
+ /* Exit code for a failed exec. */
+@@ -90,6 +91,7 @@ __FBSDID("$FreeBSD$");
+ #include "pathnames.h"
+ 
+ static int	fflg, hflg, iflg, nflg, vflg;
++static char	*executable_path, path_cp[PATH_MAX], path_rm[PATH_MAX];
+ 
+ static int	copy(const char *, const char *);
+ static int	do_move(const char *, const char *);
+@@ -101,7 +103,7 @@ static void	preserve_fd_acls(int source_fd, int dest_fd, const char *source_path
+ #endif
+ 
+ int
+-main(int argc, char *argv[])
++main(int argc, char *argv[], char *envp[], char *apple[])
+ {
+ 	size_t baselen, len;
+ 	int rval;
+@@ -112,6 +114,9 @@ main(int argc, char *argv[])
+ #endif /* __APPLE__ */
+ 	int ch;
+ 	char path[PATH_MAX];
++	executable_path = apple[0] + 16;
++	bzero(path_cp, PATH_MAX);
++	bzero(path_rm, PATH_MAX);
+ 
+ 	while ((ch = getopt(argc, argv, "fhinv")) != -1)
+ 		switch (ch) {
+@@ -510,11 +515,38 @@ err:		if (unlink(to))
+ 	return (0);
+ }
+ 
++void
++setuppaths(void)
++{
++	if (path_cp[0] != '\0' && path_rm[0] != '\0')
++		return;
++
++	char path_bin[PATH_MAX];
++	// Let's use path_cp as a temporary staging
++	if (realpath(executable_path, path_cp) == NULL)
++		goto paths_failed;
++	if (dirname_r(path_cp, path_bin) == NULL)
++		goto paths_failed;
++	strlcpy(path_cp, path_bin, PATH_MAX);
++	strlcat(path_cp, "/cp", PATH_MAX);
++
++	strlcpy(path_rm, path_bin, PATH_MAX);
++	strlcat(path_rm, "/rm", PATH_MAX);
++
++	return;
++
++paths_failed:
++	strlcpy(path_cp, _PATH_CP, PATH_MAX);
++	strlcpy(path_rm, _PATH_RM, PATH_MAX);
++	return;
++}
++
+ static int
+ copy(const char *from, const char *to)
+ {
+ 	struct stat sb;
+ 	int pid, status;
++	setuppaths();
+ 
+ 	if (lstat(to, &sb) == 0) {
+ 		/* Destination path exists. */
+@@ -536,28 +568,28 @@ copy(const char *from, const char *to)
+ 
+ 	/* Copy source to destination. */
+ 	if (!(pid = fork())) {
+-		execl(_PATH_CP, "mv", vflg ? "-PRpv" : "-PRp", "--", from, to,
++		execl(path_cp, "mv", vflg ? "-PRpv" : "-PRp", "--", from, to,
+ 		    (char *)NULL);
+ 		_exit(EXEC_FAILED);
+ 	}
+ 	if (waitpid(pid, &status, 0) == -1) {
+-		warn("%s %s %s: waitpid", _PATH_CP, from, to);
++		warn("%s %s %s: waitpid", _path_cp, from, to);
+ 		return (1);
+ 	}
+ 	if (!WIFEXITED(status)) {
+ 		warnx("%s %s %s: did not terminate normally",
+-		    _PATH_CP, from, to);
++		    _path_cp, from, to);
+ 		return (1);
+ 	}
+ 	switch (WEXITSTATUS(status)) {
+ 	case 0:
+ 		break;
+ 	case EXEC_FAILED:
+-		warnx("%s %s %s: exec failed", _PATH_CP, from, to);
++		warnx("%s %s %s: exec failed", _path_cp, from, to);
+ 		return (1);
+ 	default:
+ 		warnx("%s %s %s: terminated with %d (non-zero) status",
+-		    _PATH_CP, from, to, WEXITSTATUS(status));
++		    _path_cp, from, to, WEXITSTATUS(status));
+ 		return (1);
+ 	}
+ 
