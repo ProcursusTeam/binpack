@@ -87,13 +87,13 @@ index 9ac71cd..18aef84 100644
  	}
  	if (waitpid(pid, &status, 0) == -1) {
 -		warn("%s %s %s: waitpid", _PATH_CP, from, to);
-+		warn("%s %s %s: waitpid", _path_cp, from, to);
++		warn("%s %s %s: waitpid", path_cp, from, to);
  		return (1);
  	}
  	if (!WIFEXITED(status)) {
  		warnx("%s %s %s: did not terminate normally",
 -		    _PATH_CP, from, to);
-+		    _path_cp, from, to);
++		    path_cp, from, to);
  		return (1);
  	}
  	switch (WEXITSTATUS(status)) {
@@ -101,12 +101,12 @@ index 9ac71cd..18aef84 100644
  		break;
  	case EXEC_FAILED:
 -		warnx("%s %s %s: exec failed", _PATH_CP, from, to);
-+		warnx("%s %s %s: exec failed", _path_cp, from, to);
++		warnx("%s %s %s: exec failed", path_cp, from, to);
  		return (1);
  	default:
  		warnx("%s %s %s: terminated with %d (non-zero) status",
 -		    _PATH_CP, from, to, WEXITSTATUS(status));
-+		    _path_cp, from, to, WEXITSTATUS(status));
++		    path_cp, from, to, WEXITSTATUS(status));
  		return (1);
  	}
  
