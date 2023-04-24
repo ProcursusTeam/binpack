@@ -1,5 +1,5 @@
 diff --git a/mv/mv.c b/mv/mv.c
-index 9ac71cd..18aef84 100644
+index 9ac71cd..698b92f 100644
 --- a/mv/mv.c
 +++ b/mv/mv.c
 @@ -68,6 +68,7 @@ __FBSDID("$FreeBSD$");
@@ -76,7 +76,7 @@ index 9ac71cd..18aef84 100644
  
  	if (lstat(to, &sb) == 0) {
  		/* Destination path exists. */
-@@ -536,28 +568,28 @@ copy(const char *from, const char *to)
+@@ -536,53 +568,53 @@ copy(const char *from, const char *to)
  
  	/* Copy source to destination. */
  	if (!(pid = fork())) {
@@ -110,3 +110,33 @@ index 9ac71cd..18aef84 100644
  		return (1);
  	}
  
+ 	/* Delete the source. */
+ 	if (!(pid = fork())) {
+-		execl(_PATH_RM, "mv", "-rf", "--", from, (char *)NULL);
++		execl(path_rm, "mv", "-rf", "--", from, (char *)NULL);
+ 		_exit(EXEC_FAILED);
+ 	}
+ 	if (waitpid(pid, &status, 0) == -1) {
+-		warn("%s %s: waitpid", _PATH_RM, from);
++		warn("%s %s: waitpid", path_rm, from);
+ 		return (1);
+ 	}
+ 	if (!WIFEXITED(status)) {
+-		warnx("%s %s: did not terminate normally", _PATH_RM, from);
++		warnx("%s %s: did not terminate normally", path_rm, from);
+ 		return (1);
+ 	}
+ 	switch (WEXITSTATUS(status)) {
+ 	case 0:
+ 		break;
+ 	case EXEC_FAILED:
+-		warnx("%s %s: exec failed", _PATH_RM, from);
++		warnx("%s %s: exec failed", path_rm, from);
+ 		return (1);
+ 	default:
+ 		warnx("%s %s: terminated with %d (non-zero) status",
+-		    _PATH_RM, from, WEXITSTATUS(status));
++		    path_rm, from, WEXITSTATUS(status));
+ 		return (1);
+ 	}
+ 	return (0);
