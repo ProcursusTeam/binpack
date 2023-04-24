@@ -3,7 +3,7 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS  += less
-LESS_VERSION := 590
+LESS_VERSION := 608
 
 less-setup: setup
 	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),http://www.greenwoodsoftware.com/less/less-$(LESS_VERSION).tar.gz)

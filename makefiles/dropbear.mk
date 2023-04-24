@@ -3,10 +3,10 @@ $(error Use the main Makefile)
 endif
 
 SUBPROJECTS      += dropbear
-DROPBEAR_VERSION := 2020.81
+DROPBEAR_VERSION := 2022.83
 
 dropbear-setup: setup
-	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://github.com/mkj/dropbear/archive/DROPBEAR_2020.81.tar.gz)
+	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://github.com/mkj/dropbear/archive/DROPBEAR_$(DROPBEAR_VERSION).tar.gz)
 	$(call EXTRACT_TAR,DROPBEAR_$(DROPBEAR_VERSION).tar.gz,dropbear-DROPBEAR_$(DROPBEAR_VERSION),dropbear)
 	$(call DO_PATCH,dropbear,dropbear,-p1)
 	[ ! -e $(BUILD_WORK)/dropbear/dropbear-overrides.patch.done ] && patch -p1 -d $(BUILD_WORK)/dropbear < $(BUILD_ROOT)/patches/dropbear-overrides.patch && touch $(BUILD_WORK)/dropbear/dropbear-overrides.patch.done
@@ -39,6 +39,8 @@ dropbear: dropbear-setup
 	$(LN_S) dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/dropbearconvert
 	$(LN_S) dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/dropbearkey
 	$(LN_S) dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/scp
+	# ssh is just an alias for dbclient
+	$(LN_S) dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin/ssh
 	$(LN_S) ../bin/dropbearmulti $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/sbin/dropbear
 	mkdir -p $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/
 	cp $(BUILD_ROOT)/dropbear.plist $(BUILD_STAGE)/dropbear/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/dropbear.plist.example
